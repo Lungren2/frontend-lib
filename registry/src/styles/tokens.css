@@ -1,0 +1,18 @@
+:root {
+  color-scheme: light dark;
+
+  --ui-color-canvas: light-dark(#ffffff, #09090b);
+  --ui-color-text: light-dark(#18181b, #fafafa);
+  --ui-color-primary: light-dark(#18181b, #fafafa);
+  --ui-color-primary-hover: light-dark(#3f3f46, #e4e4e7);
+  --ui-color-on-primary: light-dark(#ffffff, #18181b);
+  --ui-color-border: light-dark(#d4d4d8, #3f3f46);
+  --ui-color-subtle-hover: light-dark(#f4f4f5, #27272a);
+  --ui-color-focus: light-dark(#2563eb, #60a5fa);
+
+  --ui-radius-medium: 0.5rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 0.75rem;
+  --ui-space-4: 1rem;
+  --ui-space-6: 1.5rem;
+}

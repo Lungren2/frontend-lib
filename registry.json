@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "frontend-lib",
+  "homepage": "https://example.invalid/frontend-lib",
+  "items": [
+    {
+      "name": "foundation",
+      "type": "registry:style",
+      "title": "Interface foundation",
+      "description": "Shared design tokens and stylesheet entry point.",
+      "files": [
+        {
+          "path": "registry/src/styles/tokens.css",
+          "type": "registry:style",
+          "target": "@ui/styles/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "A Base UI-backed button exposed as ui.button.",
+      "registryDependencies": ["foundation"],
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "registry/src/controls/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/controls/button.tsx"
+        },
+        {
+          "path": "registry/src/styles/components/button.css",
+          "type": "registry:style",
+          "target": "@ui/styles/components/button.css"
+        }
+      ]
+    }
+  ]
+}
