@@ -2,5 +2,33 @@
   "name": "@frontend-lib/cli",
   "version": "0.0.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "bin": {
+    "frontend-lib": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "@frontend-lib/engine": "workspace:*",
+    "commander": "^14.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
 }

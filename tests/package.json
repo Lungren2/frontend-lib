@@ -1,0 +1,19 @@
+{
+  "name": "@frontend-lib/lifecycle-tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "@frontend-lib/cli": "workspace:*",
+    "@frontend-lib/engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
+}

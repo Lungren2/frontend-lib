@@ -95,16 +95,19 @@ ui.config.json      Human-edited project configuration
 ui.lock.json        Machine-owned file, hash, item, and dependency ownership state
 ```
 
-The engine will eventually support:
+The engine currently supports:
 
 - `init`: detect the project, write configuration, install the foundation, and configure imports/styles.
 - `add`: resolve registry dependencies, preview a plan, install files/packages, regenerate namespace/style entry points, and update the lock.
 - `remove`: consult ownership state, detect modified files, remove safe unshared files/packages, regenerate entry points, and update the lock.
+
+Later passes may add:
+
 - `configure`: plan and apply path, theme, or system migrations.
 - `update`: compare registry versions and local hashes, show diffs, and apply selected changes.
 - `doctor`: validate configuration, dependencies, namespace, styles, manifest ownership, and file drift.
 
-Removal is a first-class differentiator. Never delete a file merely because its path resembles an installed component. Use explicit ownership plus recorded hashes, and stop or require confirmation when local edits make removal ambiguous.
+Removal is a first-class differentiator. Never delete a file merely because its path resembles an installed component. Use explicit ownership plus recorded hashes. Removal is atomic per item: if any owned file was modified, retain the entire item, its generated references, and its dependency ownership, and return a warning.
 
 Namespace and stylesheet entry points should be generated deterministically from installed registry items. Prefer regenerating files fully owned by the system over AST-editing consumer code. Do not add Babel, Recast, or ts-morph until a real mutation cannot be expressed safely without them.
 
@@ -116,7 +119,9 @@ Namespace and stylesheet entry points should be generated deterministically from
 - `ui.button` is the only component currently implemented.
 - The button wraps Base UI Button, preserves its props and behavior, and exposes `primary`, `secondary`, and `ghost` variants plus `small` and `medium` sizes.
 - The workbench displays all button variants and the disabled state.
-- The CLI and engine packages contain boundary documentation only; command behavior has not been implemented.
+- The engine implements validated `ui.config.json` and `ui.lock.json` state, registry dependency resolution, deterministic planning, SHA-256 ownership hashes, generated namespace/styles, managed package dependencies, dry runs, idempotent addition, and safe item-level removal.
+- The CLI implements thin `init`, `add`, and `remove` commands over the engine. `init` and `add` require a registry path; all three commands accept `--cwd` and `--dry-run`.
+- Cross-package lifecycle tests exercise temporary projects through both the engine API and the built CLI executable.
 - There is no published package, finalized brand, compatibility matrix, theme editor, documentation site, Storybook, multi-framework adapter, or icon dependency yet.
 
 ## Development commands
