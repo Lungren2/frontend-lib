@@ -249,3 +249,68 @@ doctor
 ```
 
 Shadcn already provides useful `init`, `add`, dry-run and diff concepts. Our meaningful extension is treating removal, ownership, drift and configuration migration as first-class operations. [Shadcn CLI reference](https://ui.shadcn.com/docs/cli)
+
+## Visual editor adoption track
+
+`vendor/tweakcn` is an unchanged, squashed Git subtree of
+[`jnsahaj/tweakcn`](https://github.com/jnsahaj/tweakcn) at upstream commit
+`f89566aef1b6d71d0f72b998d16a5980bea10c98`. It is an Apache-2.0 upstream
+reference, deliberately outside the pnpm workspace. No application imports it,
+installs its dependencies, or builds it as part of Frontend Lib.
+
+### Direct-port policy
+
+The editor will be ported and adapted directly from the subtree where that is
+the fastest route to a working result. Apache-2.0 permits reproduction and
+derivative works, subject to its redistribution conditions. Retain the license
+and applicable copyright, patent, trademark, and attribution notices; if the
+upstream work contains a `NOTICE` file, preserve its relevant notices; and add
+clear modification notices to changed upstream-derived files. Record the
+upstream file path and commit in the local editor's provenance notes.
+
+### Pass 1 — establish the unmodified baseline
+
+Goal: prove exactly what the upstream editor needs to launch and which editor
+flows work locally before adapting anything.
+
+1. Inspect the subtree's routes, scripts, environment contract, storage and
+   external-service requirements. Record which paths are essential to the theme
+   editor versus unrelated product features such as accounts, billing or AI.
+2. Create a local-only environment from the upstream example; never commit
+   credentials or add its environment file to the workspace.
+3. Install and run the subtree using its own package manifest and scripts, not
+   the root workspace.
+4. Capture a functional baseline: the editor route renders, a theme/token edit
+   updates its preview, its selected persistence/export path completes, and the
+   browser reports no errors for that flow.
+5. Record blockers explicitly. A running Next server alone is not evidence that
+   the editor works if its core token, preview or export path is unavailable.
+
+No Frontend Lib component, token, registry, CLI, or workbench code changes are
+allowed in this pass. The subtree remains an isolated baseline until it has
+launched and its editor workflow has been confirmed.
+
+### Pass 2 — behaviour contract
+
+After the baseline is proven, catalogue the editor by externally observable
+behaviour: navigation, theme data model, token controls, live preview,
+import/export format, persistence, keyboard interactions and failure states.
+The output is a small acceptance suite and interface map. It guides a direct,
+traceable port rather than adding needless reverse-engineering work.
+
+### Pass 3 — local functional replica
+
+Create a separate `apps/editor` only after the contract exists. Port the
+confirmed editor workflow from `vendor/tweakcn` into the Frontend Lib monorepo
+without integrating the current library yet. Preserve the required upstream
+notices and maintain a provenance note for each copied area. The result must
+boot independently, satisfy the recorded behaviour suite, and keep
+editor-specific dependencies isolated from the CLI and registry.
+
+### Pass 4 — adapt to Frontend Lib
+
+Once the local replica is demonstrably functional, replace its preview and token
+adapters with Frontend Lib's registry source. Map editor controls to our CSS
+custom properties and generated stylesheet entry point, then prove that a user
+can preview a change, generate a deterministic plan, and apply it through the
+engine. Preserve the engine as the only filesystem mutation authority.

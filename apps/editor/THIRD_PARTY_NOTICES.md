@@ -1,0 +1,28 @@
+# Third-party notices and provenance
+
+Portions of `apps/editor` are derived from
+[`jnsahaj/tweakcn`](https://github.com/jnsahaj/tweakcn) at upstream commit
+`f89566aef1b6d71d0f72b998d16a5980bea10c98`, licensed under the Apache License,
+Version 2.0. Frontend Lib has modified the derived files. See `LICENSE` for the
+complete upstream license text. The upstream tree contains no `NOTICE` file.
+
+The source was copied from the unchanged `vendor/tweakcn` Git subtree before
+local adaptation. Unmodified copied files remain byte-for-byte upstream source;
+modified text files carry an in-file modification notice where their format
+allows comments.
+
+| Local area | Upstream path at the commit above | Status | Material modifications |
+| --- | --- | --- | --- |
+| `app/editor/theme/` | `app/editor/theme/` | Modified | Removed database theme loading and the account/header shell; retained the editor route and responsive composition. |
+| `app/layout.tsx` | `app/layout.tsx` | Modified | Removed authentication, billing, AI/chat, analytics and query providers; retained local theme, tooltip, toast and URL-state providers; suppressed the known pre-hydration attribute mismatch. |
+| `components/editor/` | `components/editor/` | Modified area | Retained upstream token controls, presets, history, responsive editor, preview and code/import dialogs; removed AI, save/share/publish/MCP and hosted-v0 entry points from the anonymous core; normalized native color input values. |
+| `components/examples/` | `components/examples/` | Modified area | Retained upstream preview examples; replaced missing `/avatars/*.png` references with the copied local placeholder asset. |
+| `components/ui/` | `components/ui/` | Copied | Upstream UI primitives retained for the replica. |
+| `config/`, `types/`, `store/`, `utils/` | matching upstream directories | Modified area | Retained the upstream theme model, built-in presets, persistence, history, conversion, import and deterministic code generation; removed saved-theme loading from the preset store. |
+| `hooks/use-dialog-actions.tsx` | `hooks/use-dialog-actions.tsx` | Modified | Reduced the provider to local CSS import and generated-code dialogs; removed auth/database/share/save/AI/analytics behavior. |
+| `hooks/use-controls-tab-from-url.ts` | `hooks/use-controls-tab-from-url.ts` | Modified | Limited control navigation to Colors, Typography and Other and made invalid values fall back without console noise. |
+| Retained support source and preview assets | matching paths under `vendor/tweakcn` | Copied or modified area | Kept only files reachable from the editor routes, including the token model, local preview examples, and generated-code support. Unreachable account, billing, AI, analytics, saved-theme, hosted custom-preview, Figma, MCP, and unrelated demo source was removed. |
+| `package.json` and Next/PostCSS/TypeScript configuration | matching upstream files | Modified area | Renamed the private package, removed upstream service and unused dependencies plus registry-generation/minification/Husky lifecycle hooks, and added workspace typecheck and browser acceptance commands. |
+
+Frontend Lib does not claim ownership of upstream portions. Product names and
+marks are used only to identify the origin of the copied work.

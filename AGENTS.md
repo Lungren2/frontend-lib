@@ -30,21 +30,23 @@ The temporary internal package scope is `@frontend-lib/*`, and the future CLI co
 ## Repository boundaries
 
 ```text
-apps/workbench/     Development surface and browser verification of registry source
+apps/workbench/     Vite preview surface and browser verification of registry source
 packages/cli/       Terminal commands, prompts, and user-facing output
 packages/engine/    Non-interactive planning and mutation engine
 registry/           Canonical installable component source and component tests
 tests/              Cross-package installation, removal, update, and fixture tests
+vendor/tweakcn/     Unmodified upstream editor reference, outside the workspace
 registry.json       Source registry catalog
 ```
 
 Boundary rules:
 
 - `registry/` is the single source of truth for distributable UI. Do not keep a second implementation in the workbench or CLI.
-- The workbench consumes `@frontend-lib/registry` so visual development exercises canonical source.
+- The workbench consumes `@frontend-lib/registry` so visual development exercises canonical source. It may compose CLI commands and plans, but must not duplicate engine mutations in browser code.
 - `packages/cli` must remain a thin presentation layer over `packages/engine`.
 - `packages/engine` must not prompt, print terminal UI, or depend on interactive command state. It should accept inputs and return deterministic plans/results.
 - Cross-package fixture tests belong under `tests/`; component behavior tests stay beside registry components.
+- Keep `vendor/tweakcn` outside the root workspace and do not make Frontend Lib packages depend on it directly. Agents may port source from it into a local editor implementation when that is the shortest path; retain applicable Apache-2.0 license, copyright, and attribution notices, record the upstream path and commit for copied areas, and mark modified upstream-derived files clearly.
 - Create a category directory only when its first real item exists. Do not prebuild an empty component taxonomy.
 - Keep the structure shallow and purpose-based. Never introduce a flat `components/ui` dump or an empty `components` wrapper.
 - Keep a simple component in one source file. Split types, styles, parts, or tests only when their size or ownership justifies it.
@@ -118,10 +120,10 @@ Namespace and stylesheet entry points should be generated deterministically from
 - `@base-ui/react` is the component behavior dependency.
 - `ui.button` is the only component currently implemented.
 - The button wraps Base UI Button, preserves its props and behavior, and exposes `primary`, `secondary`, and `ghost` variants plus `small` and `medium` sizes.
-- The workbench displays all button variants and the disabled state.
+- The workbench is a local Vite preview and component-selection surface. It displays all button variants, the disabled state, and the deterministic CLI command for the current selection.
 - The engine implements validated `ui.config.json` and `ui.lock.json` state, registry dependency resolution, deterministic planning, SHA-256 ownership hashes, generated namespace/styles, managed package dependencies, dry runs, idempotent addition, and safe item-level removal.
 - The CLI implements thin `init`, `add`, and `remove` commands over the engine. `init` and `add` require a registry path; all three commands accept `--cwd` and `--dry-run`.
-- Cross-package lifecycle tests exercise temporary projects through both the engine API and the built CLI executable.
+- Cross-package lifecycle tests exercise temporary projects through both the engine API and the built CLI executable. A Vite fixture installs the source and completes a production build.
 - There is no published package, finalized brand, compatibility matrix, theme editor, documentation site, Storybook, multi-framework adapter, or icon dependency yet.
 
 ## Development commands
