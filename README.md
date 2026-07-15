@@ -2,7 +2,11 @@
 
 An agent-friendly, source-owned React interface system built on Base UI.
 
-The repository is a pnpm monorepo containing the component registry, installation tooling, and a Vite workbench that exercises the same source consumers receive. Run `pnpm dev` to open the local component preview and compose CLI install commands.
+The repository is a pnpm monorepo containing the component registry, installation tooling, and a local theme editor. Run `pnpm dev` to open the editor.
+
+The editor's `Frontend Lib` tab renders canonical registry source. Set
+`FRONTEND_LIB_TARGET_CWD` to an initialized consumer project to review and apply a deterministic
+theme plan through the engine.
 
 ## Development
 

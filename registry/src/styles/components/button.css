@@ -1,14 +1,16 @@
 .ui-button {
   display: inline-flex;
-  min-block-size: 2.5rem;
+  block-size: 2.25rem;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   gap: var(--ui-space-2);
   border: 1px solid transparent;
   border-radius: var(--ui-radius-medium);
   padding-inline: var(--ui-space-4);
-  font: inherit;
-  font-weight: 600;
+  font-family: var(--ui-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
@@ -20,9 +22,9 @@
 }
 
 .ui-button[data-size="small"] {
-  min-block-size: 2.25rem;
+  block-size: 2rem;
+  gap: calc(var(--ui-space-3) / 2);
   padding-inline: var(--ui-space-3);
-  font-size: 0.875rem;
 }
 
 .ui-button[data-variant="primary"] {
@@ -31,9 +33,8 @@
 }
 
 .ui-button[data-variant="secondary"] {
-  color: var(--ui-color-text);
-  background: transparent;
-  border-color: var(--ui-color-border);
+  color: var(--ui-color-on-secondary);
+  background: var(--ui-color-secondary);
 }
 
 .ui-button[data-variant="ghost"] {
@@ -46,24 +47,26 @@
     background: var(--ui-color-primary-hover);
   }
 
-  .ui-button[data-variant="secondary"]:hover:not([data-disabled]),
+  .ui-button[data-variant="secondary"]:hover:not([data-disabled]) {
+    background: var(--ui-color-secondary-hover);
+  }
+
   .ui-button[data-variant="ghost"]:hover:not([data-disabled]) {
+    color: var(--ui-color-on-subtle-hover);
     background: var(--ui-color-subtle-hover);
   }
 }
 
 .ui-button:focus-visible {
-  outline: 2px solid var(--ui-color-focus);
-  outline-offset: 2px;
-}
-
-.ui-button:active:not([data-disabled]) {
-  translate: 0 1px;
+  border-color: var(--ui-color-focus);
+  outline: none;
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--ui-color-focus) 50%, transparent);
 }
 
 .ui-button[data-disabled] {
   opacity: 0.5;
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -78,6 +81,9 @@
   }
 
   .ui-button:focus-visible {
+    border-color: Highlight;
     outline-color: Highlight;
+    outline-style: solid;
+    box-shadow: none;
   }
 }

@@ -1,0 +1,765 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-15T06:35:35.862Z",
+  "source": {
+    "catalogueEndpoint": "https://www.googleapis.com/webfonts/v1/webfonts?capability=VF&capability=WOFF2",
+    "catalogueCapabilities": ["VF", "WOFF2"],
+    "googleFontsRepository": "https://github.com/google/fonts",
+    "googleFontsCommit": "03781cf7a714af8431d14b6f337f923c774429d7"
+  },
+  "policy": {
+    "format": "WOFF2 only",
+    "glyphCoverage": "Complete supported-script coverage returned by the Web Fonts Developer API",
+    "variableFontsPreferred": true,
+    "runtimeStatus": "vendored but not imported by the editor",
+    "staticException": "Space Mono regular/italic at weights 400 and 700"
+  },
+  "families": [
+    {
+      "family": "Inter",
+      "slug": "inter",
+      "category": "sans-serif",
+      "role": "neutral UI sans",
+      "rationale": "Default-grade legibility with optical sizing.",
+      "version": "v20",
+      "lastModified": "2025-09-10",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "opsz",
+          "start": 14,
+          "end": 32
+        },
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/inter/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/inter/v20/UcCo3FwrK3iLTfvgaQc78lA2.woff2",
+          "format": "woff2",
+          "bytes": 349376,
+          "sha256": "2a54364257349b6c145fa4dd7ec41d3e0b8ab3144205b6f0cd58578aa370e671"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/inter/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/inter/v20/UcCm3FwrK3iLTcvnYwYZ90A2B58.woff2",
+          "format": "woff2",
+          "bytes": 385120,
+          "sha256": "58c061410da49077f626cbd492e963b0c2d0d90e7d82116c8af2b8071d3d08c9"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/inter/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/inter/OFL.txt",
+        "bytes": 4377,
+        "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+      },
+      "metadata": {
+        "path": "/fonts/google/inter/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/inter/METADATA.pb",
+        "bytes": 1342,
+        "sha256": "79e4721ef4f72251c6080a40dfd9efb6728b4df1fc690f0c70eb4b1b5303a5b0"
+      }
+    },
+    {
+      "family": "DM Sans",
+      "slug": "dmsans",
+      "category": "sans-serif",
+      "role": "humanist UI sans",
+      "rationale": "Warmer interface voice with optical sizing.",
+      "version": "v17",
+      "lastModified": "2025-09-11",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "opsz",
+          "start": 9,
+          "end": 40
+        },
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 1000
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/dmsans/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/dmsans/v17/rP2Hp2ywxg089UriOZGCHBeHFl0.woff2",
+          "format": "woff2",
+          "bytes": 88568,
+          "sha256": "daf261ebcfd84689ff547833992451eec82882e6daebcae9acd9f829834371e6"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/dmsans/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/dmsans/v17/rP2Fp2ywxg089UriCZaIHTWCBl0O8Q.woff2",
+          "format": "woff2",
+          "bytes": 111880,
+          "sha256": "7752dd5eacd3ba8aaa32bcd2c258d13de66049f22faecd0f56dd11c2670f4443"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/dmsans/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/dmsans/OFL.txt",
+        "bytes": 4482,
+        "sha256": "9af36190332437f5ecd09974de43c1f7c77a310a996cdd8ceb25628b458840e1"
+      },
+      "metadata": {
+        "path": "/fonts/google/dmsans/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/dmsans/METADATA.pb",
+        "bytes": 1283,
+        "sha256": "55b3697a416f7d08c093918a4019a75cca7186c64bc56b1bb23e197a5d559dee"
+      }
+    },
+    {
+      "family": "Plus Jakarta Sans",
+      "slug": "plusjakartasans",
+      "category": "sans-serif",
+      "role": "geometric UI sans",
+      "rationale": "Friendly geometric alternative used by multiple presets.",
+      "version": "v12",
+      "lastModified": "2025-09-10",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 200,
+          "end": 800
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/plusjakartasans/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Jo02S2CgOva.woff2",
+          "format": "woff2",
+          "bytes": 60052,
+          "sha256": "c7697ed5add6ad35e7b3d5a65f651f140fcaaab1e0febc5d302e796c7ec445bc"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/plusjakartasans/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/plusjakartasans/v12/LDIuaomQNQcsA88c7O9yZ4KMCoOg4Koz0yyghfvaV-E.woff2",
+          "format": "woff2",
+          "bytes": 65132,
+          "sha256": "5de8909ddd9ff5b2289bcfc059ae19f2554a531cd81a7c8b3b71b346affa86cf"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/plusjakartasans/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/plusjakartasans/OFL.txt",
+        "bytes": 4402,
+        "sha256": "995c7199cab65954f545996326755daee7b63cc6b42b06c13da1f9502ab08a99"
+      },
+      "metadata": {
+        "path": "/fonts/google/plusjakartasans/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/plusjakartasans/METADATA.pb",
+        "bytes": 1396,
+        "sha256": "e7953d66e52a1e09235d75fc7aef7139c2733c0b5507afcf6e9afbe0fcef1de6"
+      }
+    },
+    {
+      "family": "Geist",
+      "slug": "geist",
+      "category": "sans-serif",
+      "role": "modern UI sans",
+      "rationale": "Compact contemporary product typography.",
+      "version": "v5",
+      "lastModified": "2026-05-13",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/geist/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMHweElSvO5Tc.woff2",
+          "format": "woff2",
+          "bytes": 68792,
+          "sha256": "c589db2af43e4757cfc1c8860279aea7a976ebc8d2dfc42079413e6feae68b05"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/geist/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/geist/v5/gyB8hwUxId8gMEwZGFWNPoTcVY4.woff2",
+          "format": "woff2",
+          "bytes": 72372,
+          "sha256": "f5386a9ec92d1771f3384cd8ae4736ff1b5d1c9385e2028f7cb31e72337d9621"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/geist/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/geist/OFL.txt",
+        "bytes": 4387,
+        "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f"
+      },
+      "metadata": {
+        "path": "/fonts/google/geist/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/geist/METADATA.pb",
+        "bytes": 1348,
+        "sha256": "62d302155bfbf778e9c488ef00671a4ad71a8a4cdc808ec66ceb668373afe900"
+      }
+    },
+    {
+      "family": "Outfit",
+      "slug": "outfit",
+      "category": "sans-serif",
+      "role": "display sans",
+      "rationale": "Single-style geometric display range.",
+      "version": "v15",
+      "lastModified": "2025-09-05",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 900
+        }
+      ],
+      "variants": ["regular"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/outfit/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4N5tkFrc4H0ng.woff2",
+          "format": "woff2",
+          "bytes": 44696,
+          "sha256": "99bd3f38d4854dbb296b53fb55c0956891e0111ccc86053966b7e99d6f99c162"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/outfit/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/outfit/OFL.txt",
+        "bytes": 4389,
+        "sha256": "c676351bf8576b9aba743cd5eaa8c0e7ee0d51f805d720447b4df4ddb6a2e416"
+      },
+      "metadata": {
+        "path": "/fonts/google/outfit/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/outfit/METADATA.pb",
+        "bytes": 835,
+        "sha256": "4cd9d2154f15495ca97de561060d535eaba9f7007be4a87e40f3b58ea8111cf2"
+      }
+    },
+    {
+      "family": "Oxanium",
+      "slug": "oxanium",
+      "category": "display",
+      "role": "technical display",
+      "rationale": "Distinct technical voice not covered by neutral sans faces.",
+      "version": "v21",
+      "lastModified": "2025-09-10",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 200,
+          "end": 800
+        }
+      ],
+      "variants": ["regular"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/oxanium/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/oxanium/v21/RrQQboN_4yJ0JmiMS2DO0LBBd4Y.woff2",
+          "format": "woff2",
+          "bytes": 18708,
+          "sha256": "3340b749e05025bf3b0c857e413d7e70089879b830ae3922cc453d0dca2b0d4b"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/oxanium/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/oxanium/OFL.txt",
+        "bytes": 4384,
+        "sha256": "fe17c0f2581d71b4e1ea7e636e7f4877c29223e11bb1dd1a871e8c3f2a86336b"
+      },
+      "metadata": {
+        "path": "/fonts/google/oxanium/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/oxanium/METADATA.pb",
+        "bytes": 1583,
+        "sha256": "adf6faeb4238003d1d5eb8d15f59c940e145672e3f78bcf82b1802afe9f7c4d2"
+      }
+    },
+    {
+      "family": "Source Serif 4",
+      "slug": "sourceserif4",
+      "category": "serif",
+      "role": "text serif",
+      "rationale": "Broad weight and optical-size range for editorial text.",
+      "version": "v14",
+      "lastModified": "2025-09-11",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "opsz",
+          "start": 8,
+          "end": 60
+        },
+        {
+          "tag": "wght",
+          "start": 200,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/sourceserif4/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/sourceserif4/v14/vEFI2_tTDB4M7-auWDN0ahZJW2gZ-NaXXq7H.woff2",
+          "format": "woff2",
+          "bytes": 423948,
+          "sha256": "97489b8b613c45e2159edcf8e6af18ce14f509c0c0cda19cc24da235e7735f56"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/sourceserif4/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/sourceserif4/v14/vEFK2_tTDB4M7-auWDN0ahZJW1ge8te1W77HtMo.woff2",
+          "format": "woff2",
+          "bytes": 342984,
+          "sha256": "685f48816ed292702f4e466e2c21b5fe82b4d25055c1e37360a87b4b6b5c4aca"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/sourceserif4/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/sourceserif4/OFL.txt",
+        "bytes": 4400,
+        "sha256": "5f94c3fd3a23131a417ab5a0c8452de57e70c3cfb9f604d88241f7065ebf9fd9"
+      },
+      "metadata": {
+        "path": "/fonts/google/sourceserif4/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/sourceserif4/METADATA.pb",
+        "bytes": 1132,
+        "sha256": "f7b88902c1d2f41839a3f7bf6723d1e64044c7c183b82871ce770a95f24b84e3"
+      }
+    },
+    {
+      "family": "Lora",
+      "slug": "lora",
+      "category": "serif",
+      "role": "warm text serif",
+      "rationale": "Readable contemporary serif used throughout the presets.",
+      "version": "v37",
+      "lastModified": "2025-09-11",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 400,
+          "end": 700
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/lora/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/lora/v37/0QIvMX1D_JOuAwjxItNPh_A.woff2",
+          "format": "woff2",
+          "bytes": 84404,
+          "sha256": "e478944f5510d4ca231369a396894a8d80069f49740095fbc1e09f78f4e21dc5"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/lora/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/lora/v37/0QIhMX1D_JOuMw_7I_FKl_C28g.woff2",
+          "format": "woff2",
+          "bytes": 90700,
+          "sha256": "82a500639512407ed453e8bb73901a2f115c829f51ac0ef0f0581e4523e66efd"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/lora/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/lora/OFL.txt",
+        "bytes": 4423,
+        "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716"
+      },
+      "metadata": {
+        "path": "/fonts/google/lora/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/lora/METADATA.pb",
+        "bytes": 1349,
+        "sha256": "6d9e38cc8926e903359a1c4c358fd2e71864f422aae9550d0d9a2ae0c62ddb8d"
+      }
+    },
+    {
+      "family": "Playfair Display",
+      "slug": "playfairdisplay",
+      "category": "serif",
+      "role": "display serif",
+      "rationale": "High-contrast editorial display option.",
+      "version": "v40",
+      "lastModified": "2025-09-11",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 400,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/playfairdisplay/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXPT7SgWE_-xU.woff2",
+          "format": "woff2",
+          "bytes": 106664,
+          "sha256": "9f2c1b41cccab67fbd77d8eea0cba9ff0a5858672b0de1133beec49a2aa7cf16"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/playfairdisplay/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFkD-vYSZviVYUb_rj3ij__anPXDTnYgEM66xV7PQ.woff2",
+          "format": "woff2",
+          "bytes": 104176,
+          "sha256": "8d96576e99df09ecdb89ac5b6b2257414a32624f7783046038edb8b538a118b0"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/playfairdisplay/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/playfairdisplay/OFL.txt",
+        "bytes": 4449,
+        "sha256": "566be814f8e96e93dfa16101331557eb6b5467e9e03f627c0910fe93ca12300e"
+      },
+      "metadata": {
+        "path": "/fonts/google/playfairdisplay/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/playfairdisplay/METADATA.pb",
+        "bytes": 1202,
+        "sha256": "c9e6a996754f710fb7ff2ba36f8dd807244318d561d63d247a22199ea1a5e94a"
+      }
+    },
+    {
+      "family": "Merriweather",
+      "slug": "merriweather",
+      "category": "serif",
+      "role": "screen serif",
+      "rationale": "Screen-oriented serif with optical size and width axes.",
+      "version": "v33",
+      "lastModified": "2025-09-02",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "opsz",
+          "start": 18,
+          "end": 144
+        },
+        {
+          "tag": "wdth",
+          "start": 87,
+          "end": 112
+        },
+        {
+          "tag": "wght",
+          "start": 300,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/merriweather/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/merriweather/v33/u-440qyriQwlOrhSvowK_l5OfixNV-bnrw.woff2",
+          "format": "woff2",
+          "bytes": 2474612,
+          "sha256": "89eeee22b47d23640e04cc233d260a8e6089125c1154b391e1fb617c841346f3"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/merriweather/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/merriweather/v33/u-4m0qyriQwlOrhSvowK_l5-eSZMdeP3r-Ho.woff2",
+          "format": "woff2",
+          "bytes": 2466764,
+          "sha256": "5e5a8b63e756af35178a2c17b660aa240365492a90f50943f50ec7d03be0d429"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/merriweather/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/merriweather/OFL.txt",
+        "bytes": 4438,
+        "sha256": "715bd349bfa6116f99e351e1548321dcfa25b91df65502d22ca8d624557697d2"
+      },
+      "metadata": {
+        "path": "/fonts/google/merriweather/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/merriweather/METADATA.pb",
+        "bytes": 5391,
+        "sha256": "50aa12ab94b75275eb90b6353dd3f9b187c101ce0a89071f5456c052490a4345"
+      }
+    },
+    {
+      "family": "JetBrains Mono",
+      "slug": "jetbrainsmono",
+      "category": "monospace",
+      "role": "coding mono",
+      "rationale": "Primary coding face with a broad variable weight range.",
+      "version": "v24",
+      "lastModified": "2025-09-11",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 800
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/jetbrainsmono/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbV2o-flEEny0FZhsfKu5WU4yD5MQCPTFrV.woff2",
+          "format": "woff2",
+          "bytes": 72968,
+          "sha256": "b0828b0c4cc048fb35ece95e398aea1b085a63ae328578aee85c8a69c5f27e81"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/jetbrainsmono/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbX2o-flEEny0FZhsfKu5WU4xD-OwGtSUrV_BE.woff2",
+          "format": "woff2",
+          "bytes": 77580,
+          "sha256": "dd07f2a87f23c2b18bdb6b7e72e7c463fb2f35ed3144a2a3f6cb216e4bab369f"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/jetbrainsmono/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/jetbrainsmono/OFL.txt",
+        "bytes": 4399,
+        "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d"
+      },
+      "metadata": {
+        "path": "/fonts/google/jetbrainsmono/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/jetbrainsmono/METADATA.pb",
+        "bytes": 3203,
+        "sha256": "220f22dd4d2a3d9c77183fbbcb250779267725d90d9be673b403dc6bcfada0af"
+      }
+    },
+    {
+      "family": "Fira Code",
+      "slug": "firacode",
+      "category": "monospace",
+      "role": "ligature coding mono",
+      "rationale": "Programming ligatures in one variable roman file.",
+      "version": "v27",
+      "lastModified": "2025-09-16",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 300,
+          "end": 700
+        }
+      ],
+      "variants": ["regular"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/firacode/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/firacode/v27/uU9NCBsR6Z2vfE9aq3bR396CilKOdQ.woff2",
+          "format": "woff2",
+          "bytes": 108892,
+          "sha256": "5d7633c681a1bc428e528faea845e4b9ffd6e1773503861ac99484e2e34a5ac4"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/firacode/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/firacode/OFL.txt",
+        "bytes": 4391,
+        "sha256": "926041dac670e6922505e35ac1661a4e8d20f1ffeabbbcb5edb5544370702369"
+      },
+      "metadata": {
+        "path": "/fonts/google/firacode/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/firacode/METADATA.pb",
+        "bytes": 750,
+        "sha256": "815580aeae2482e87f5f033f8a43b3c61c3e81761b79db5d783612430133a366"
+      }
+    },
+    {
+      "family": "Geist Mono",
+      "slug": "geistmono",
+      "category": "monospace",
+      "role": "modern mono",
+      "rationale": "Neutral companion to Geist for product interfaces.",
+      "version": "v6",
+      "lastModified": "2026-06-08",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 100,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/geistmono/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYJrUXmzPnnks.woff2",
+          "format": "woff2",
+          "bytes": 70608,
+          "sha256": "f3352ba05d44fc777dbc90215e6c76f217a82b2721336f4e868b191e17327d24"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/geistmono/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/geistmono/v6/or3lQ6H-1_WfwkMZI_qYFrIdmhHijksNbA.woff2",
+          "format": "woff2",
+          "bytes": 78392,
+          "sha256": "e7da4fcf25d1536541ba7bd4ce6fcd6b89995bac176263acf5fbcf65deb82733"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/geistmono/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/geistmono/OFL.txt",
+        "bytes": 4387,
+        "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f"
+      },
+      "metadata": {
+        "path": "/fonts/google/geistmono/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/geistmono/METADATA.pb",
+        "bytes": 1473,
+        "sha256": "55d2fe9078cf7debb333b4d294e945586e6b1c3b2bc68225f88a2e01d87a69a3"
+      }
+    },
+    {
+      "family": "Source Code Pro",
+      "slug": "sourcecodepro",
+      "category": "monospace",
+      "role": "humanist mono",
+      "rationale": "Readable humanist alternative for dense code and data.",
+      "version": "v31",
+      "lastModified": "2025-09-08",
+      "variable": true,
+      "axes": [
+        {
+          "tag": "wght",
+          "start": 200,
+          "end": 900
+        }
+      ],
+      "variants": ["regular", "italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/sourcecodepro/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/sourcecodepro/v31/HI_SiYsKILxRpg3hIP6sJ7fM7PqVP-HXvMY3xw.woff2",
+          "format": "woff2",
+          "bytes": 88572,
+          "sha256": "01f26c5b3fc981fccc4f1adbc49f61dfae0ae6ebf3174ff46ef0fddbcd894ee7"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/sourcecodepro/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/sourcecodepro/v31/HI_QiYsKILxRpg3hIP6sJ7fM7PqlOOvWnsMnx3C9.woff2",
+          "format": "woff2",
+          "bytes": 74356,
+          "sha256": "e8d1a0c10578f3e50c291ab6771f9b513622ab98b4ca9fd4b857a163a342c975"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/sourcecodepro/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/sourcecodepro/OFL.txt",
+        "bytes": 4622,
+        "sha256": "cb30d3086a8b3ce0b9e3690bf48d6620402b61160bc658076f95180ccd9e9dae"
+      },
+      "metadata": {
+        "path": "/fonts/google/sourcecodepro/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/sourcecodepro/METADATA.pb",
+        "bytes": 1119,
+        "sha256": "1a0b7a468b627f45f2df8b71a873273c1b074b5d921a0085f36f4c7532662587"
+      }
+    },
+    {
+      "family": "Space Mono",
+      "slug": "spacemono",
+      "category": "monospace",
+      "role": "geometric display mono",
+      "rationale": "Deliberate static exception for its distinctive voice and frequent preset use.",
+      "version": "v17",
+      "lastModified": "2025-06-25",
+      "variable": false,
+      "axes": [],
+      "variants": ["regular", "italic", "700", "700italic"],
+      "files": [
+        {
+          "variant": "regular",
+          "path": "/fonts/google/spacemono/regular.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/spacemono/v17/i7dPIFZifjKcF5UAWdDRUEN2RFq7AwU.woff2",
+          "format": "woff2",
+          "bytes": 34716,
+          "sha256": "f4607f6233ab6ee29ebdc8d942c2e325d5096856aeb97f9f84d453a3e75c2b3d"
+        },
+        {
+          "variant": "italic",
+          "path": "/fonts/google/spacemono/italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/spacemono/v17/i7dNIFZifjKcF5UAWdDRYER8RXi-EwWMbg.woff2",
+          "format": "woff2",
+          "bytes": 37076,
+          "sha256": "22705f667819c01df1ce25f14416dc488fb5e86b43fd915609afa0db72cf7c84"
+        },
+        {
+          "variant": "700",
+          "path": "/fonts/google/spacemono/700.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/spacemono/v17/i7dMIFZifjKcF5UAWdDRaPpZYFeQHwyVd3U.woff2",
+          "format": "woff2",
+          "bytes": 35220,
+          "sha256": "2f0203bf3a42f83945ccfb132649505fa051dc46506da0a9ad01169261b5258e"
+        },
+        {
+          "variant": "700italic",
+          "path": "/fonts/google/spacemono/700italic.woff2",
+          "sourceUrl": "https://fonts.gstatic.com/s/spacemono/v17/i7dSIFZifjKcF5UAWdDRYERE_FeaHi6QZ3WfYg.woff2",
+          "format": "woff2",
+          "bytes": 35960,
+          "sha256": "b0d6361bbf41d316137b055f9ebc6c41100358681e794a9ba43f6e4eb69ef112"
+        }
+      ],
+      "license": {
+        "type": "SIL Open Font License 1.1",
+        "path": "/fonts/google/spacemono/OFL.txt",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/spacemono/OFL.txt",
+        "bytes": 4392,
+        "sha256": "8e4ee42b2553e1e01504e61cb0d46d148cd8c9e5eacaa3622a7df2d4f2955b9f"
+      },
+      "metadata": {
+        "path": "/fonts/google/spacemono/METADATA.pb",
+        "sourceUrl": "https://raw.githubusercontent.com/google/fonts/03781cf7a714af8431d14b6f337f923c774429d7/ofl/spacemono/METADATA.pb",
+        "bytes": 1951,
+        "sha256": "5dadfea714098a304264ff8c2e8420d04a457a62caf3685ad01c9abdb7fddb45"
+      }
+    }
+  ]
+}

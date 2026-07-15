@@ -1,0 +1,2 @@
+# Preserve vendored license text byte-for-byte, including upstream trailing spaces.
+apps/editor/public/fonts/google/**/OFL.txt whitespace=-trailing-space

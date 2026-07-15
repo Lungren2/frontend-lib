@@ -30,7 +30,7 @@ The temporary internal package scope is `@frontend-lib/*`, and the future CLI co
 ## Repository boundaries
 
 ```text
-apps/workbench/     Vite preview surface and browser verification of registry source
+apps/editor/        Private local theme editor and preview surface
 packages/cli/       Terminal commands, prompts, and user-facing output
 packages/engine/    Non-interactive planning and mutation engine
 registry/           Canonical installable component source and component tests
@@ -41,8 +41,8 @@ registry.json       Source registry catalog
 
 Boundary rules:
 
-- `registry/` is the single source of truth for distributable UI. Do not keep a second implementation in the workbench or CLI.
-- The workbench consumes `@frontend-lib/registry` so visual development exercises canonical source. It may compose CLI commands and plans, but must not duplicate engine mutations in browser code.
+- `registry/` is the single source of truth for distributable UI. Do not keep a second implementation in the editor or CLI.
+- The editor consumes the registry's public component and stylesheet exports for its canonical preview. Its loopback-only server route may call the engine's plan/apply API for one server-configured consumer target; browser code must never mutate files or choose the target path.
 - `packages/cli` must remain a thin presentation layer over `packages/engine`.
 - `packages/engine` must not prompt, print terminal UI, or depend on interactive command state. It should accept inputs and return deterministic plans/results.
 - Cross-package fixture tests belong under `tests/`; component behavior tests stay beside registry components.
@@ -120,11 +120,14 @@ Namespace and stylesheet entry points should be generated deterministically from
 - `@base-ui/react` is the component behavior dependency.
 - `ui.button` is the only component currently implemented.
 - The button wraps Base UI Button, preserves its props and behavior, and exposes `primary`, `secondary`, and `ghost` variants plus `small` and `medium` sizes.
-- The workbench is a local Vite preview and component-selection surface. It displays all button variants, the disabled state, and the deterministic CLI command for the current selection.
 - The engine implements validated `ui.config.json` and `ui.lock.json` state, registry dependency resolution, deterministic planning, SHA-256 ownership hashes, generated namespace/styles, managed package dependencies, dry runs, idempotent addition, and safe item-level removal.
+- The engine also owns two-phase theme configuration: `planTheme` hashes sorted writes and file preconditions without mutating, while `applyTheme` rejects stale plans before writing an owned `styles/theme.css` and regenerating the layered stylesheet entry point.
 - The CLI implements thin `init`, `add`, and `remove` commands over the engine. `init` and `add` require a registry path; all three commands accept `--cwd` and `--dry-run`.
 - Cross-package lifecycle tests exercise temporary projects through both the engine API and the built CLI executable. A Vite fixture installs the source and completes a production build.
-- There is no published package, finalized brand, compatibility matrix, theme editor, documentation site, Storybook, multi-framework adapter, or icon dependency yet.
+- The private local theme editor is a traceable tweakcn derivative with token editing, live previews, import/export, local persistence, and a loopback-only streamed, multi-turn Codex SDK theme chat. Its server retains opaque in-memory chat mappings and applies only validated theme payloads.
+- The editor's Frontend Lib tab renders the canonical registry `ui.button` and public stylesheet in one scoped surface. A shared adapter maps editor state to `--ui-*` preview values and the engine theme contract. Plan/apply uses only `FRONTEND_LIB_TARGET_CWD` from the server environment and never accepts a browser-supplied filesystem path.
+- The editor has a curated, license-complete Google Fonts cache with 15 preset-relevant families, 14 variable families, 29 WOFF2 files, generated `@font-face` CSS, source hashes and an offline integrity check. The CSS is deliberately not imported yet; runtime self-hosting remains a separate adaptation.
+- There is no published package, finalized brand, compatibility matrix, documentation site, Storybook, multi-framework adapter, or icon dependency yet.
 
 ## Development commands
 
@@ -132,7 +135,7 @@ Use pnpm from the repository root:
 
 ```text
 pnpm install          Install all workspace dependencies
-pnpm dev              Run the workbench
+pnpm dev              Run the editor
 pnpm typecheck        Type-check participating packages
 pnpm test             Run automated tests
 pnpm build            Build participating packages/apps
@@ -143,10 +146,10 @@ pnpm format:check     Check formatting without writing
 
 ## Verification expectations
 
-- A component change is incomplete until its types, behavior tests, production build, and real workbench rendering have been checked.
+- A component change is incomplete until its types, behavior tests, and production consumer build have been checked.
 - Test semantic output and behavior, not implementation details. For example, verify that `ui.button` renders a native button, exposes design-system attributes, invokes handlers, and blocks disabled interaction.
 - Register Testing Library cleanup globally so tests remain isolated.
-- For visual component changes, check at least wide desktop and mobile-width workbench layouts, long content, keyboard focus, disabled behavior, overflow, and console errors.
+- For visual component changes, verify wide desktop and mobile-width layouts, long content, keyboard focus, disabled behavior, overflow, and console errors in an appropriate consumer surface.
 - Stop development servers and browser sessions started during verification.
 - Run `pnpm check` and `pnpm format:check` before handing off a completed change.
 
@@ -154,7 +157,7 @@ pnpm format:check     Check formatting without writing
 
 - Do not reproduce shadcn/ui's repository scale, dependency count, or flat installed directory.
 - Do not build multiple style systems, framework adapters, themes, component categories, or registry servers before the first workflow requires them.
-- Do not add Storybook while the workbench is sufficient.
+- Do not add Storybook without a confirmed component-development requirement.
 - Do not introduce a compiler transform or custom JSX runtime for native-looking tags.
 - Do not make the single `ui` namespace the only possible package export; retain room for named/subpath exports where bundling, testing, or framework boundaries require them.
 - Do not claim accessibility merely because Base UI is present. Preserve labeling and structure, and verify the wrapper's actual output and interaction.

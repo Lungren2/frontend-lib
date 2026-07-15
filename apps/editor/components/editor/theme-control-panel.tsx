@@ -3,10 +3,11 @@
 // Derived from jnsahaj/tweakcn components/editor/theme-control-panel.tsx at f89566aef1b6d71d0f72b998d16a5980bea10c98.
 // Modified by Frontend Lib; see apps/editor/THIRD_PARTY_NOTICES.md.
 
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Sparkles } from "lucide-react";
 import React from "react";
 
 import { ColorsTabContent } from "@/components/editor/colors-tab-content";
+import { LocalThemeGenerator } from "@/components/editor/ai/local-theme-generator";
 import ControlSection from "@/components/editor/control-section";
 import { FontPicker } from "@/components/editor/font-picker";
 import HslAdjustmentControls from "@/components/editor/hsl-adjustment-controls";
@@ -103,6 +104,10 @@ const ThemeControlPanel = ({ styles, currentMode, onChange }: ThemeControlPanelP
               <TabsTriggerPill value="colors">Colors</TabsTriggerPill>
               <TabsTriggerPill value="typography">Typography</TabsTriggerPill>
               <TabsTriggerPill value="other">Other</TabsTriggerPill>
+              <TabsTriggerPill value="ai">
+                <Sparkles className="mr-1 size-3.5" />
+                Generate
+              </TabsTriggerPill>
             </TabsList>
           </HorizontalScrollArea>
 
@@ -247,6 +252,9 @@ const ThemeControlPanel = ({ styles, currentMode, onChange }: ThemeControlPanelP
             </ScrollArea>
           </TabsContent>
 
+          <TabsContent value="ai" className="mt-1 size-full overflow-hidden">
+            <LocalThemeGenerator />
+          </TabsContent>
         </Tabs>
       </div>
     </>

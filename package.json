@@ -10,7 +10,7 @@
   "scripts": {
     "build": "turbo run build",
     "check": "pnpm typecheck && pnpm test && pnpm build",
-    "dev": "turbo run dev --filter=@frontend-lib/workbench",
+    "dev": "turbo run dev --filter=@frontend-lib/editor",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo run test",

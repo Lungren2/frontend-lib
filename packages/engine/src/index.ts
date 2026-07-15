@@ -1,16 +1,20 @@
 import { createHash } from "node:crypto";
-import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
   configSchema,
   lockSchema,
   registrySchema,
+  themeConfigurationSchema,
   type Config,
   type Lock,
   type Registry,
   type RegistryItem,
+  type ThemeConfiguration,
 } from "./schemas.ts";
+
+export type { ThemeConfiguration } from "./schemas.ts";
 
 export type ChangeType = "create" | "update" | "delete";
 
@@ -26,6 +30,10 @@ export type EngineResult = {
 
 export type OperationResult = EngineResult;
 
+export type ThemePlan = EngineResult & {
+  planId: string;
+};
+
 export type InitProjectOptions = CommonOptions;
 
 export type AddItemsOptions = CommonOptions & {
@@ -34,6 +42,15 @@ export type AddItemsOptions = CommonOptions & {
 
 export type RemoveItemsOptions = Omit<CommonOptions, "registryPath"> & {
   items: string[];
+};
+
+export type PlanThemeOptions = {
+  cwd: string;
+  theme: ThemeConfiguration;
+};
+
+export type ApplyThemeOptions = PlanThemeOptions & {
+  expectedPlanId: string;
 };
 
 type CommonOptions = {
@@ -50,6 +67,7 @@ type Plan = {
   warnings: string[];
   writes: Map<string, PlannedWrite>;
   deletes: Set<string>;
+  preconditions: Map<string, string | null>;
 };
 
 const CONFIG_FILE = "ui.config.json";
@@ -148,6 +166,65 @@ export async function removeItems(
   return applyPlan(plan);
 }
 
+export async function planTheme(options: PlanThemeOptions): Promise<ThemePlan> {
+  const plan = await createThemePlan(options);
+  return {
+    ...(await applyPlan({ ...plan, dryRun: true })),
+    planId: planIdentity(plan),
+  };
+}
+
+export async function applyTheme(
+  options: ApplyThemeOptions,
+): Promise<EngineResult> {
+  const plan = await createThemePlan(options);
+  const actualPlanId = planIdentity(plan);
+  if (actualPlanId !== options.expectedPlanId) {
+    throw new Error(
+      "The theme plan is stale. Generate a new plan before applying it.",
+    );
+  }
+  return applyPlan(plan);
+}
+
+async function createThemePlan(options: PlanThemeOptions): Promise<Plan> {
+  const plan = createPlan(options.cwd);
+  const config = await readConfig(options.cwd);
+  const lock = await readLock(options.cwd);
+  const theme = themeConfigurationSchema.parse(options.theme);
+  const themePath = `${config.uiDir}/styles/theme.css`;
+  const current = await readOptional(resolveProjectPath(plan.cwd, themePath));
+  const ownedTheme = lock.theme?.file;
+
+  if (current !== undefined && !ownedTheme) {
+    throw new Error(
+      `Cannot configure the theme because "${themePath}" already exists and is not owned by Frontend Lib.`,
+    );
+  }
+  if (
+    current !== undefined &&
+    ownedTheme &&
+    hash(current) !== ownedTheme.hash
+  ) {
+    throw new Error(
+      `Cannot configure the theme because owned file "${themePath}" was modified.`,
+    );
+  }
+
+  const content = generateThemeStylesheet(theme);
+  await planWrite(plan, themePath, content);
+  lock.theme = {
+    file: {
+      path: themePath,
+      hash: hash(content),
+      type: "registry:style",
+    },
+  };
+  await planGeneratedFiles(plan, config, lock);
+  await planJson(plan, LOCK_FILE, lock);
+  return plan;
+}
+
 function createPlan(cwd: string, dryRun = false): Plan {
   return {
     cwd: path.resolve(cwd),
@@ -156,6 +233,7 @@ function createPlan(cwd: string, dryRun = false): Plan {
     warnings: [],
     writes: new Map(),
     deletes: new Set(),
+    preconditions: new Map(),
   };
 }
 
@@ -397,13 +475,23 @@ async function planGeneratedFiles(plan: Plan, config: Config, lock: Lock) {
     .filter((file) => file.type === "registry:style")
     .map((file) => file.path)
     .filter((target) => target !== `${config.uiDir}/styles/index.css`)
-    .sort();
+    .concat(lock.theme?.file.path ?? [])
+    .filter((target, index, targets) => targets.indexOf(target) === index)
+    .sort((left, right) => {
+      const rank = (target: string) =>
+        target.includes("tokens") ? 0 : target.endsWith("/theme.css") ? 1 : 2;
+      return rank(left) - rank(right) || left.localeCompare(right);
+    });
   const styleIndex = [
-    "@layer ui.tokens, ui.components;",
+    "@layer ui.tokens, ui.theme, ui.components;",
     "",
     ...styleTargets.map((target) => {
       const relative = path.posix.relative(`${config.uiDir}/styles`, target);
-      const layer = relative.includes("tokens") ? "ui.tokens" : "ui.components";
+      const layer = relative.includes("tokens")
+        ? "ui.tokens"
+        : relative === "theme.css"
+          ? "ui.theme"
+          : "ui.components";
       return `@import ${JSON.stringify(`./${relative}`)} layer(${layer});`;
     }),
     "",
@@ -432,6 +520,7 @@ async function planWrite(plan: Plan, relativePath: string, content: string) {
   const absolutePath = resolveProjectPath(plan.cwd, normalized);
   const current = await readOptional(absolutePath);
   if (current === content) return;
+  recordPrecondition(plan, normalized, current);
   plan.deletes.delete(normalized);
   plan.writes.set(normalized, { absolutePath, content });
   upsertChange(plan, {
@@ -442,7 +531,9 @@ async function planWrite(plan: Plan, relativePath: string, content: string) {
 
 async function planDelete(plan: Plan, relativePath: string) {
   const normalized = normalizeRelative(relativePath);
-  if (!(await exists(resolveProjectPath(plan.cwd, normalized)))) return;
+  const current = await readOptional(resolveProjectPath(plan.cwd, normalized));
+  if (current === undefined) return;
+  recordPrecondition(plan, normalized, current);
   plan.writes.delete(normalized);
   plan.deletes.add(normalized);
   upsertChange(plan, { action: "delete", path: normalized });
@@ -459,6 +550,7 @@ function upsertChange(plan: Plan, change: Change) {
 async function applyPlan(plan: Plan): Promise<EngineResult> {
   plan.changes.sort((a, b) => a.path.localeCompare(b.path));
   if (!plan.dryRun) {
+    await assertPlanPreconditions(plan);
     for (const relativePath of [...plan.deletes].sort()) {
       await rm(resolveProjectPath(plan.cwd, relativePath));
     }
@@ -471,6 +563,93 @@ async function applyPlan(plan: Plan): Promise<EngineResult> {
     }
   }
   return { changes: plan.changes, warnings: plan.warnings };
+}
+
+function recordPrecondition(
+  plan: Plan,
+  relativePath: string,
+  current: string | undefined,
+) {
+  if (!plan.preconditions.has(relativePath)) {
+    plan.preconditions.set(
+      relativePath,
+      current === undefined ? null : hash(current),
+    );
+  }
+}
+
+async function assertPlanPreconditions(plan: Plan) {
+  for (const [relativePath, expected] of [...plan.preconditions].sort(
+    ([a], [b]) => a.localeCompare(b),
+  )) {
+    const current = await readOptional(
+      resolveProjectPath(plan.cwd, relativePath),
+    );
+    const actual = current === undefined ? null : hash(current);
+    if (actual !== expected) {
+      throw new Error(
+        `The plan is stale because "${relativePath}" changed. Generate a new plan before applying it.`,
+      );
+    }
+  }
+}
+
+function planIdentity(plan: Plan) {
+  const value = {
+    changes: [...plan.changes].sort((a, b) => a.path.localeCompare(b.path)),
+    warnings: [...plan.warnings],
+    writes: [...plan.writes]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([relativePath, write]) => ({
+        path: relativePath,
+        before: plan.preconditions.get(relativePath) ?? null,
+        after: hash(write.content),
+      })),
+    deletes: [...plan.deletes].sort().map((relativePath) => ({
+      path: relativePath,
+      before: plan.preconditions.get(relativePath) ?? null,
+    })),
+  };
+  return hash(JSON.stringify(value));
+}
+
+function generateThemeStylesheet(theme: ThemeConfiguration) {
+  const modeLines = (mode: ThemeConfiguration["light"]) => [
+    `  --ui-color-canvas: ${mode.canvas};`,
+    `  --ui-color-text: ${mode.text};`,
+    `  --ui-color-primary: ${mode.primary};`,
+    `  --ui-color-primary-hover: color-mix(in oklab, ${mode.primary} 90%, transparent);`,
+    `  --ui-color-on-primary: ${mode.onPrimary};`,
+    `  --ui-color-secondary: ${mode.secondary};`,
+    `  --ui-color-secondary-hover: color-mix(in oklab, ${mode.secondary} 80%, transparent);`,
+    `  --ui-color-on-secondary: ${mode.onSecondary};`,
+    `  --ui-color-subtle-hover: ${mode.accent};`,
+    `  --ui-color-on-subtle-hover: ${mode.onAccent};`,
+    `  --ui-color-destructive: ${mode.destructive};`,
+    `  --ui-color-on-destructive: ${mode.onDestructive};`,
+    `  --ui-color-border: ${mode.border};`,
+    `  --ui-color-focus: ${mode.focus};`,
+  ];
+  return [
+    ":root {",
+    "  color-scheme: light;",
+    ...modeLines(theme.light),
+    `  --ui-font-sans: ${theme.fontSans};`,
+    `  --ui-font-serif: ${theme.fontSerif};`,
+    `  --ui-font-mono: ${theme.fontMono};`,
+    `  --ui-radius-medium: max(0px, calc(${theme.radius} - 2px));`,
+    `  --ui-space-2: calc(${theme.spacing} * 2);`,
+    `  --ui-space-3: calc(${theme.spacing} * 3);`,
+    `  --ui-space-4: calc(${theme.spacing} * 4);`,
+    `  --ui-space-6: calc(${theme.spacing} * 6);`,
+    "}",
+    "",
+    ":root.dark {",
+    "  color-scheme: dark;",
+    ...modeLines(theme.dark),
+    "}",
+    "",
+  ].join("\n");
 }
 
 function resolveTarget(config: Config, target: string): string {
@@ -548,16 +727,6 @@ async function readOptional(filePath: string) {
     return await readFile(filePath, "utf8");
   } catch (error) {
     if (isNotFound(error)) return undefined;
-    throw error;
-  }
-}
-
-async function exists(filePath: string) {
-  try {
-    await access(filePath);
-    return true;
-  } catch (error) {
-    if (isNotFound(error)) return false;
     throw error;
   }
 }

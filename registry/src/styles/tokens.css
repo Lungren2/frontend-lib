@@ -6,9 +6,19 @@
   --ui-color-primary: light-dark(#18181b, #fafafa);
   --ui-color-primary-hover: light-dark(#3f3f46, #e4e4e7);
   --ui-color-on-primary: light-dark(#ffffff, #18181b);
+  --ui-color-secondary: light-dark(#f4f4f5, #27272a);
+  --ui-color-secondary-hover: light-dark(#e4e4e7, #3f3f46);
+  --ui-color-on-secondary: light-dark(#18181b, #fafafa);
   --ui-color-border: light-dark(#d4d4d8, #3f3f46);
   --ui-color-subtle-hover: light-dark(#f4f4f5, #27272a);
+  --ui-color-on-subtle-hover: light-dark(#18181b, #fafafa);
+  --ui-color-destructive: light-dark(#dc2626, #f87171);
+  --ui-color-on-destructive: #ffffff;
   --ui-color-focus: light-dark(#2563eb, #60a5fa);
+
+  --ui-font-sans: ui-sans-serif, system-ui, sans-serif;
+  --ui-font-serif: ui-serif, Georgia, serif;
+  --ui-font-mono: ui-monospace, monospace;
 
   --ui-radius-medium: 0.5rem;
   --ui-space-2: 0.5rem;

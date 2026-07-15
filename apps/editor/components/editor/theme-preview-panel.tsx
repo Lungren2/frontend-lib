@@ -32,8 +32,14 @@ const DemoApplication = lazy(() => import("@/components/examples/application"));
 const DemoMarketing = lazy(() => import("@/components/examples/marketing"));
 const DemoMail = lazy(() => import("@/components/examples/mail"));
 const DemoDashboard = lazy(() => import("@/components/examples/dashboard"));
-const TypographyDemo = lazy(() => import("@/components/examples/typography/typography-demo"));
+const TypographyDemo = lazy(
+  () => import("@/components/examples/typography/typography-demo"),
+);
+const FrontendLibPreview = lazy(
+  () => import("./theme-preview/frontend-lib-preview"),
+);
 const PREVIEW_TABS = new Set([
+  "frontend-lib",
   "cards",
   "dashboard",
   "application",
@@ -77,7 +83,7 @@ const ThemePreviewPanel = ({
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col",
-          isFullscreen && "bg-background fixed inset-0 z-50"
+          isFullscreen && "bg-background fixed inset-0 z-50",
         )}
       >
         <Tabs
@@ -87,25 +93,38 @@ const ThemePreviewPanel = ({
         >
           <HorizontalScrollArea className="mt-2 mb-1 flex w-full items-center justify-between px-4">
             <TabsList className="bg-background text-muted-foreground inline-flex w-fit items-center justify-center rounded-full px-0">
+              <TabsTriggerPill value="frontend-lib">
+                Frontend Lib
+              </TabsTriggerPill>
               <TabsTriggerPill value="cards">Cards</TabsTriggerPill>
 
               <div className="hidden md:flex">
                 <TabsTriggerPill value="dashboard">Dashboard</TabsTriggerPill>
-                <TabsTriggerPill value="application">Application</TabsTriggerPill>
+                <TabsTriggerPill value="application">
+                  Application
+                </TabsTriggerPill>
               </div>
               <TabsTriggerPill value="marketing">Marketing</TabsTriggerPill>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <TooltipWrapper label="More previews" asChild>
-                    <Button aria-label="More previews" variant="ghost" size="icon">
+                    <Button
+                      aria-label="More previews"
+                      variant="ghost"
+                      size="icon"
+                    >
                       <MoreVertical />
                     </Button>
                   </TooltipWrapper>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => handleTabChange("mail")}>Mail</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleTabChange("typography")}>
+                  <DropdownMenuItem onClick={() => handleTabChange("mail")}>
+                    Mail
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleTabChange("typography")}
+                  >
                     Typography
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleTabChange("colors")}>
@@ -131,11 +150,14 @@ const ThemePreviewPanel = ({
                   onClick={toggleInspector}
                   className={cn(
                     "group size-8",
-                    inspectorEnabled && "bg-accent text-accent-foreground w-auto"
+                    inspectorEnabled &&
+                      "bg-accent text-accent-foreground w-auto",
                   )}
                 >
                   <Inspect className="transition-all group-hover:scale-120" />
-                  {inspectorEnabled && <span className="text-xs tracking-wide uppercase">on</span>}
+                  {inspectorEnabled && (
+                    <span className="text-xs tracking-wide uppercase">on</span>
+                  )}
                 </Button>
               </TooltipWrapper>
               <TooltipWrapper
@@ -162,18 +184,29 @@ const ThemePreviewPanel = ({
           <section
             className={cn(
               "relative size-full overflow-hidden",
-              activeTab === "cards" ? "pb-4" : "p-4 pt-1"
+              activeTab === "cards" ? "pb-4" : "p-4 pt-1",
             )}
           >
             <div
               className={cn(
                 "relative isolate size-full overflow-hidden",
-                activeTab !== "cards" && "rounded-lg"
+                activeTab !== "cards" && "rounded-lg",
               )}
               ref={rootRef}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
+              <TabsContent value="frontend-lib" className="m-0 size-full">
+                <ExamplesPreviewContainer className="size-full">
+                  <ScrollArea className="size-full">
+                    <FrontendLibPreview
+                      styles={styles}
+                      currentMode={currentMode}
+                    />
+                  </ScrollArea>
+                </ExamplesPreviewContainer>
+              </TabsContent>
+
               <TabsContent value="cards" className="m-0 size-full">
                 <ExamplesPreviewContainer className="size-full">
                   <ScrollArea className="size-full">
@@ -182,7 +215,10 @@ const ThemePreviewPanel = ({
                 </ExamplesPreviewContainer>
               </TabsContent>
 
-              <TabsContent value="dashboard" className="@container m-0 size-full">
+              <TabsContent
+                value="dashboard"
+                className="@container m-0 size-full"
+              >
                 <ExamplesPreviewContainer className="size-full">
                   <ScrollArea className="size-full">
                     <div className="size-full min-w-[1400px]">
@@ -193,7 +229,10 @@ const ThemePreviewPanel = ({
                 </ExamplesPreviewContainer>
               </TabsContent>
 
-              <TabsContent value="application" className="@container m-0 size-full">
+              <TabsContent
+                value="application"
+                className="@container m-0 size-full"
+              >
                 <ExamplesPreviewContainer className="size-full">
                   <ScrollArea className="size-full">
                     <DemoApplication />
@@ -201,7 +240,10 @@ const ThemePreviewPanel = ({
                 </ExamplesPreviewContainer>
               </TabsContent>
 
-              <TabsContent value="marketing" className="@container m-0 size-full">
+              <TabsContent
+                value="marketing"
+                className="@container m-0 size-full"
+              >
                 <ExamplesPreviewContainer className="size-full">
                   <ScrollArea className="size-full [&_[data-slot=scroll-area-scrollbar]]:z-[60]">
                     <DemoMarketing />
@@ -240,7 +282,11 @@ const ThemePreviewPanel = ({
         </Tabs>
       </div>
 
-      <InspectorOverlay inspector={inspector} enabled={inspectorEnabled} rootRef={rootRef} />
+      <InspectorOverlay
+        inspector={inspector}
+        enabled={inspectorEnabled}
+        rootRef={rootRef}
+      />
     </>
   );
 };

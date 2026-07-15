@@ -1,7 +1,13 @@
+/* Derived from jnsahaj/tweakcn app/globals.css at f89566aef1b6d71d0f72b998d16a5980bea10c98. */
+/* Modified by Frontend Lib; see apps/editor/THIRD_PARTY_NOTICES.md. */
+
+@layer theme, base, components, utilities, ui.tokens, ui.theme, ui.components;
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "streamdown/styles.css";
 @import "./loaders.css";
+@import "@frontend-lib/registry/styles.css";
 
 @source "../node_modules/streamdown/dist";
 

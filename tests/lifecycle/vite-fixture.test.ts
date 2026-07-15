@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process";
 import { cp, mkdtemp, mkdir, rm, symlink } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { promisify } from "node:util";
@@ -15,9 +16,11 @@ const repositoryRoot = resolve(
 );
 const fixtureSource = join(repositoryRoot, "tests/fixtures/vite-react");
 const registryPath = join(repositoryRoot, "registry.json");
+const require = createRequire(import.meta.url);
+const vitestRequire = createRequire(require.resolve("vitest/package.json"));
 const vitePath = join(
-  repositoryRoot,
-  "apps/workbench/node_modules/vite/bin/vite.js",
+  dirname(vitestRequire.resolve("vite/package.json")),
+  "bin/vite.js",
 );
 const projects: string[] = [];
 
@@ -42,8 +45,8 @@ test("the installed button builds in a Vite consumer fixture", async () => {
 async function linkConsumerDependencies(cwd: string) {
   const links = [
     ["@base-ui/react", "registry/node_modules/@base-ui/react"],
-    ["react", "apps/workbench/node_modules/react"],
-    ["react-dom", "apps/workbench/node_modules/react-dom"],
+    ["react", "registry/node_modules/react"],
+    ["react-dom", "registry/node_modules/react-dom"],
   ] as const;
 
   for (const [name, source] of links) {

@@ -29,12 +29,7 @@ Assumptions for this proposal:
 ```text
 frontend-lib/
 ├─ apps/
-│  └─ workbench/
-│     ├─ src/
-│     │  ├─ examples/
-│     │  ├─ accessibility/
-│     │  └─ installed-ui/
-│     └─ tests/
+│  └─ editor/
 │
 ├─ packages/
 │  ├─ cli/
@@ -137,7 +132,6 @@ flowchart LR
     Engine --> CLI["CLI\ninit, add, remove, configure"]
     CLI --> Consumer["Consumer project\nsrc/interface/ui"]
     CLI --> Manifest["Ownership manifest\nfiles, hashes, dependencies"]
-    Workbench["Workbench\nexamples and visual QA"] --> CLI
     Tests["Fixture projects\nVite, RSC, existing app"] --> CLI
     Consumer --> BaseUI["Base UI runtime"]
 ```
@@ -188,27 +182,27 @@ That lock file is essential for safe removal. Without it, the CLI cannot reliabl
 
 ## Dependency stack
 
-| Area | Proposed dependencies | Reason |
-|---|---|---|
-| Workspace | pnpm workspaces | Mature monorepo support and consistent package-manager behavior |
-| Task orchestration | Turborepo | Shared build, test and typecheck pipeline across packages and workbench |
-| Language | TypeScript | CLI, registry metadata, components and tests |
-| Component behavior | `@base-ui/react` | Accessible interaction, state, focus, portals and composition |
-| Rendering peers | `react`, `react-dom` | Consumer peer dependencies and workbench runtime |
-| Styling | Plain CSS and custom properties | Framework-neutral styling contract; no mandatory Tailwind |
-| CLI parsing | `commander` | Stable command and option parsing |
-| Validation | `zod` | Configuration, registry and manifest validation |
-| Prompts | `@clack/prompts` or `prompts` | Interactive confirmations and selections |
-| Process execution | `execa` | Package-manager and formatter commands |
-| File discovery | `fast-glob` | Project and registry file resolution |
-| Diffing | `diff` | Dry runs, conflict previews and modified-file detection |
-| CLI build | `tsup` | Small distributable Node executable |
-| Unit tests | Vitest | Engine, schemas, planning and filesystem tests |
-| Browser tests | Playwright | Installed component behavior and keyboard interaction |
-| Accessibility | `@axe-core/playwright` | Automated checks in the real rendered workbench |
-| Component tests | Testing Library | Focused interaction and semantic tests |
-| Formatting | Prettier | Repository formatting and optional generated-file formatting |
-| Releases | Changesets | CLI versioning and package publication |
+| Area               | Proposed dependencies           | Reason                                                               |
+| ------------------ | ------------------------------- | -------------------------------------------------------------------- |
+| Workspace          | pnpm workspaces                 | Mature monorepo support and consistent package-manager behavior      |
+| Task orchestration | Turborepo                       | Shared build, test and typecheck pipeline across packages and editor |
+| Language           | TypeScript                      | CLI, registry metadata, components and tests                         |
+| Component behavior | `@base-ui/react`                | Accessible interaction, state, focus, portals and composition        |
+| Rendering peers    | `react`, `react-dom`            | Consumer peer dependencies and test runtime                          |
+| Styling            | Plain CSS and custom properties | Framework-neutral styling contract; no mandatory Tailwind            |
+| CLI parsing        | `commander`                     | Stable command and option parsing                                    |
+| Validation         | `zod`                           | Configuration, registry and manifest validation                      |
+| Prompts            | `@clack/prompts` or `prompts`   | Interactive confirmations and selections                             |
+| Process execution  | `execa`                         | Package-manager and formatter commands                               |
+| File discovery     | `fast-glob`                     | Project and registry file resolution                                 |
+| Diffing            | `diff`                          | Dry runs, conflict previews and modified-file detection              |
+| CLI build          | `tsup`                          | Small distributable Node executable                                  |
+| Unit tests         | Vitest                          | Engine, schemas, planning and filesystem tests                       |
+| Browser tests      | Playwright                      | Installed component behavior and keyboard interaction                |
+| Accessibility      | `@axe-core/playwright`          | Automated checks in rendered consumer fixtures                       |
+| Component tests    | Testing Library                 | Focused interaction and semantic tests                               |
+| Formatting         | Prettier                        | Repository formatting and optional generated-file formatting         |
+| Releases           | Changesets                      | CLI versioning and package publication                               |
 
 Shadcn currently uses pnpm workspaces, Turborepo, Commander, Zod, Execa, Vitest and tsup, so these are proven choices for this type of distribution platform. We should adopt the useful infrastructure without copying its entire dependency surface. [Current shadcn repository](https://github.com/shadcn-ui/ui), [CLI package manifest](https://raw.githubusercontent.com/shadcn-ui/ui/main/packages/shadcn/package.json)
 
@@ -219,7 +213,7 @@ Dependencies I would deliberately omit initially:
 - Storybook
 - Babel, Recast and ts-morph
 - A mandatory icon library
-- A documentation framework separate from the workbench
+- A documentation framework
 - Multiple framework adapters
 
 Data attributes and CSS selectors can handle initial variants without CVA. Namespace files and other fully owned files can be regenerated deterministically, avoiding AST rewriting until we confirm a real need.
@@ -286,7 +280,7 @@ flows work locally before adapting anything.
 5. Record blockers explicitly. A running Next server alone is not evidence that
    the editor works if its core token, preview or export path is unavailable.
 
-No Frontend Lib component, token, registry, CLI, or workbench code changes are
+No Frontend Lib component, token, registry, CLI, or app code changes are
 allowed in this pass. The subtree remains an isolated baseline until it has
 launched and its editor workflow has been confirmed.
 
@@ -314,3 +308,35 @@ adapters with Frontend Lib's registry source. Map editor controls to our CSS
 custom properties and generated stylesheet entry point, then prove that a user
 can preview a change, generate a deterministic plan, and apply it through the
 engine. Preserve the engine as the only filesystem mutation authority.
+
+Pass 4 keeps the copied tweakcn previews as reference fixtures and adds one
+canonical `Frontend Lib` preview tab. Until the registry contains more than one
+component, that tab holds the complete registry surface in one place. It imports
+`ui` and the public stylesheet entry point from `@frontend-lib/registry`; it does
+not copy registry components into the editor.
+
+The adapter maps the editor's light/dark colors, fonts, radius and spacing to
+`--ui-*` variables. The same normalized theme object drives the scoped live
+preview and the engine configuration request. The engine owns generated
+`styles/theme.css`, records its hash in `ui.lock.json`, and regenerates
+`styles/index.css` with explicit token, theme and component layers.
+
+Theme application is a two-phase engine operation. Planning performs no writes
+and returns a deterministic SHA-256 plan identity covering sorted changes,
+proposed contents and current-file preconditions. Applying rebuilds the plan and
+rejects stale or modified targets before any mutation. The editor server obtains
+the consumer directory from `FRONTEND_LIB_TARGET_CWD`; browser requests cannot
+choose an arbitrary filesystem path.
+
+Pass 4 acceptance scenarios:
+
+1. `?p=frontend-lib` renders the canonical Base UI-backed `ui.button` variants,
+   sizes, disabled state and long content through the registry stylesheet.
+2. Editing a supported token changes the registry preview without a reload and
+   preserves the copied reference previews.
+3. Generate plan lists the sorted `theme.css`, stylesheet entry-point and lock
+   changes without writing them.
+4. Apply uses the reviewed plan identity, writes only through the engine, and
+   produces the configured consumer stylesheet.
+5. A changed target or plan identity fails safely with zero partial writes, and
+   cross-site browser requests cannot invoke the local engine route.
