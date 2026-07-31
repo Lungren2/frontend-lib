@@ -16,12 +16,10 @@ bun.lock
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
+/.output/
+/.tanstack/
 
 # misc
 .DS_Store
@@ -38,12 +36,8 @@ yarn-error.log*
 .env
 .env*.local
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # build artifacts
 public/r/themes

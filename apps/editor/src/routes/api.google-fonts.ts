@@ -1,14 +1,18 @@
-import { PaginatedFontsResponse } from "@/types/fonts";
+import type { PaginatedFontsResponse } from "@/types/fonts";
 import { FALLBACK_FONTS } from "@/utils/fonts";
 import { fetchGoogleFonts } from "@/utils/fonts/google-fonts";
-import { unstable_cache } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { createFileRoute } from "@tanstack/react-router";
 
-const cachedFetchGoogleFonts = unstable_cache(fetchGoogleFonts, ["google-fonts-catalogue"], {
-  tags: ["google-fonts-catalogue"],
-});
+let cachedGoogleFonts: Awaited<ReturnType<typeof fetchGoogleFonts>> | undefined;
 
-export async function GET(request: NextRequest) {
+async function cachedFetchGoogleFonts(apiKey: string | undefined) {
+  if (!cachedGoogleFonts) {
+    cachedGoogleFonts = await fetchGoogleFonts(apiKey);
+  }
+  return cachedGoogleFonts;
+}
+
+async function getGoogleFonts(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q")?.toLowerCase() || "";
@@ -46,9 +50,17 @@ export async function GET(request: NextRequest) {
       hasMore: offset + limit < filteredFonts.length,
     };
 
-    return NextResponse.json(response);
+    return Response.json(response);
   } catch (error) {
     console.error("Error in Google Fonts API:", error);
-    return NextResponse.json({ error: "Failed to fetch fonts" }, { status: 500 });
+    return Response.json({ error: "Failed to fetch fonts" }, { status: 500 });
   }
 }
+
+export const Route = createFileRoute("/api/google-fonts")({
+  server: {
+    handlers: {
+      GET: ({ request }) => getGoogleFonts(request),
+    },
+  },
+});

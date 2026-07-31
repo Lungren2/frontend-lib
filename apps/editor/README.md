@@ -39,11 +39,12 @@ the sorted changes. **Apply engine plan** submits the same theme and reviewed pl
 engine rejects stale plans or modified owned theme files before writing `styles/theme.css`, the
 generated stylesheet entry point, and `ui.lock.json`.
 
-The Generate tab is a streamed, multi-turn chat backed by `@openai/codex-sdk` in the Next.js
-server process. Sign in once with `codex login`, then run the editor on `localhost` or another
-loopback address. Progress summaries and Codex's reply stream into the chat; only a complete,
-validated theme is applied. The server keeps opaque chat mappings in memory for up to one hour,
-so chats reset when the editor server restarts. **New chat** explicitly forgets the active mapping.
+The Generate tab is a streamed, multi-turn chat backed by `@openai/codex-sdk` in the TanStack
+Start/Nitro server process. Sign in once with `codex login`, then run the editor on `localhost` or
+another loopback address. Progress summaries and Codex's reply stream into the chat; only a
+complete, validated theme is applied. The server keeps opaque chat mappings in memory for up to
+one hour, so chats reset when the editor server restarts. **New chat** explicitly forgets the
+active mapping.
 
 The SDK launches Codex locally with read-only filesystem access in a disposable working directory
 and a limited runtime environment. Model requests still use OpenAI and therefore require network

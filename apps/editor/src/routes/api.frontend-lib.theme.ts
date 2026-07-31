@@ -3,12 +3,11 @@ import {
   planTheme,
   type ThemeConfiguration,
 } from "@frontend-lib/engine";
+import { createFileRoute } from "@tanstack/react-router";
 import path from "node:path";
 import { z } from "zod";
 
-export const runtime = "nodejs";
-
-const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"]);
+const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "[::1]", "localhost"]);
 const MAX_REQUEST_BYTES = 64_000;
 
 const themeModeSchema = z.object({
@@ -75,7 +74,7 @@ function targetDirectory() {
   return path.resolve(configured);
 }
 
-export async function POST(request: Request) {
+async function postFrontendLibTheme(request: Request) {
   if (!isLoopbackRequest(request)) {
     return Response.json(
       {
@@ -116,3 +115,11 @@ export async function POST(request: Request) {
     return Response.json({ error: message }, { status });
   }
 }
+
+export const Route = createFileRoute("/api/frontend-lib/theme")({
+  server: {
+    handlers: {
+      POST: ({ request }) => postFrontendLibTheme(request),
+    },
+  },
+});

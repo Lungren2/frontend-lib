@@ -9,7 +9,7 @@
 @import "./loaders.css";
 @import "@frontend-lib/registry/styles.css";
 
-@source "../node_modules/streamdown/dist";
+@source "../../node_modules/streamdown/dist";
 
 @custom-variant dark (&:is(.dark *));
 

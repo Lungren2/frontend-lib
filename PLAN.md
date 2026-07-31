@@ -277,7 +277,7 @@ flows work locally before adapting anything.
 4. Capture a functional baseline: the editor route renders, a theme/token edit
    updates its preview, its selected persistence/export path completes, and the
    browser reports no errors for that flow.
-5. Record blockers explicitly. A running Next server alone is not evidence that
+5. Record blockers explicitly. A running editor server alone is not evidence that
    the editor works if its core token, preview or export path is unavailable.
 
 No Frontend Lib component, token, registry, CLI, or app code changes are

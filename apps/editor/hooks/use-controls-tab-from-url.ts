@@ -1,32 +1,29 @@
 // Derived from jnsahaj/tweakcn hooks/use-controls-tab-from-url.ts at f89566aef1b6d71d0f72b998d16a5980bea10c98.
 // Modified by Frontend Lib; see apps/editor/THIRD_PARTY_NOTICES.md.
 
-import { useQueryState } from "nuqs";
+import { getRouteApi } from "@tanstack/react-router";
 
 const TABS = ["colors", "typography", "other", "ai"] as const;
 export const DEFAULT_TAB = TABS[0];
 export type ControlTab = (typeof TABS)[number];
 
+const editorThemeRoute = getRouteApi("/editor/theme");
+
 export const useControlsTabFromUrl = () => {
-  const [tab, setTab] = useQueryState("tab", {
-    defaultValue: DEFAULT_TAB,
-    parse: (value: string) => {
-      // Synchronously validate the tab value, and if it's invalid, fallback to the default tab
-      if (!TABS.includes(value as ControlTab)) {
-        return DEFAULT_TAB;
-      }
-      return value as ControlTab;
-    },
-  });
+  const { tab: searchTab } = editorThemeRoute.useSearch();
+  const navigate = editorThemeRoute.useNavigate();
+  const tab = searchTab ?? DEFAULT_TAB;
 
   const handleSetTab = (tab: ControlTab) => {
-    // If the incoming tab is invalid, fallback to the default tab
-    if (!TABS.includes(tab)) {
-      setTab(DEFAULT_TAB);
-      return;
-    }
+    const nextTab = TABS.includes(tab) ? tab : DEFAULT_TAB;
 
-    setTab(tab);
+    void navigate({
+      replace: true,
+      search: (previous) => ({
+        ...previous,
+        tab: nextTab === DEFAULT_TAB ? undefined : nextTab,
+      }),
+    });
   };
 
   return { tab, handleSetTab };

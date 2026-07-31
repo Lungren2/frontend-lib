@@ -1,9 +1,8 @@
-"use client";
-
 // Derived from jnsahaj/tweakcn components/theme-script.tsx at f89566aef1b6d71d0f72b998d16a5980bea10c98.
 // Modified by Frontend Lib; see apps/editor/THIRD_PARTY_NOTICES.md.
 
 import { defaultDarkThemeStyles, defaultLightThemeStyles } from "@/config/theme";
+import { ScriptOnce } from "@tanstack/react-router";
 
 export function ThemeScript() {
   const scriptContent = `
@@ -100,5 +99,5 @@ export function ThemeScript() {
     })();
   `;
 
-  return <script dangerouslySetInnerHTML={{ __html: scriptContent }} suppressHydrationWarning />;
+  return <ScriptOnce>{scriptContent}</ScriptOnce>;
 }

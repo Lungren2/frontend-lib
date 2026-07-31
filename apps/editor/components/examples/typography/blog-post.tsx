@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Bookmark, Calendar, Clock, Heart, MessageCircle, Share2 } from "lucide-react";
-import Image from "next/image";
 
 export function BlogPost() {
   return (
@@ -68,11 +67,10 @@ export function BlogPost() {
 
           {/* Featured Image */}
           <div className="relative aspect-video overflow-hidden rounded-lg">
-            <Image
+            <img
               src="/placeholder.svg?height=600&width=1200"
               alt="Featured image"
-              fill
-              className="object-cover"
+              className="absolute inset-0 size-full object-cover"
             />
           </div>
 

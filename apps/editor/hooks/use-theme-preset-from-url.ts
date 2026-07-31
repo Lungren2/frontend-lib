@@ -1,16 +1,22 @@
-import { useQueryState } from "nuqs";
+import { getRouteApi } from "@tanstack/react-router";
 import React from "react";
 import { useEditorStore } from "@/store/editor-store";
 
+const editorThemeRoute = getRouteApi("/editor/theme");
+
 export const useThemePresetFromUrl = () => {
-  const [preset, setPreset] = useQueryState("theme");
+  const { theme: preset } = editorThemeRoute.useSearch();
+  const navigate = editorThemeRoute.useNavigate();
   const applyThemePreset = useEditorStore((state) => state.applyThemePreset);
 
   // Apply theme preset if it exists in URL and remove it
   React.useEffect(() => {
     if (preset) {
       applyThemePreset(preset);
-      setPreset(null); // Remove the preset from URL
+      void navigate({
+        replace: true,
+        search: (previous) => ({ ...previous, theme: undefined }),
+      });
     }
-  }, [preset, setPreset, applyThemePreset]);
+  }, [preset, navigate, applyThemePreset]);
 };

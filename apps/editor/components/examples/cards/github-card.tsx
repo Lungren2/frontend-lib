@@ -4,7 +4,6 @@ import { Circle, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 
 export function GithubCard() {
   return (
@@ -19,12 +18,16 @@ export function GithubCard() {
             </CardDescription>
           </div>
           <div className="bg-secondary text-secondary-foreground flex min-w-20 shrink-0 items-center space-x-1 rounded-md">
-            <Link href="https://github.com/jnsahaj/tweakcn">
-              <Button variant="secondary" className="flex items-center gap-2 px-3 shadow-none">
+            <Button
+              asChild
+              variant="secondary"
+              className="flex items-center gap-2 px-3 shadow-none"
+            >
+              <a href="https://github.com/jnsahaj/tweakcn">
                 <Star />
                 Star
-              </Button>
-            </Link>
+              </a>
+            </Button>
           </div>
         </div>
       </CardHeader>

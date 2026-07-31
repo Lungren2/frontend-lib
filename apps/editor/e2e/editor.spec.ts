@@ -381,10 +381,97 @@ test("keeps all local control and preview surfaces independent of optional servi
   observed.expectClean();
 });
 
+test("validates and synchronizes editor URL state", async ({ page }) => {
+  await page.goto("/editor/theme?tab=typography&p=dashboard");
+  await expect(page.getByRole("tab", { name: "Typography" })).toHaveAttribute(
+    "data-state",
+    "active",
+  );
+  await expect(page.getByRole("tab", { name: "Dashboard" })).toHaveAttribute(
+    "data-state",
+    "active",
+  );
+
+  await page.getByRole("tab", { name: "Other" }).click();
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("tab"))
+    .toBe("other");
+  expect(new URL(page.url()).searchParams.get("p")).toBe("dashboard");
+
+  await page.goto("/editor/theme?tab=unsupported&p=unsupported");
+  await expect(page.getByRole("tab", { name: "Colors" })).toHaveAttribute(
+    "data-state",
+    "active",
+  );
+  await expect(page.getByRole("tab", { name: "Cards" })).toHaveAttribute(
+    "data-state",
+    "active",
+  );
+});
+
+test("applies a theme preset from the URL exactly once", async ({ page }) => {
+  await page.goto(
+    "/editor/theme?theme=violet-bloom&tab=typography&p=dashboard",
+  );
+
+  await expect(
+    page.getByRole("button", { name: /Violet Bloom/i }).first(),
+  ).toBeVisible();
+  await expect
+    .poll(() => new URL(page.url()).searchParams.get("theme"))
+    .toBeNull();
+  expect(new URL(page.url()).searchParams.get("tab")).toBe("typography");
+  expect(new URL(page.url()).searchParams.get("p")).toBe("dashboard");
+});
+
+test("serves the paginated fallback font catalogue without an API key", async ({
+  request,
+}) => {
+  const response = await request.get("/api/google-fonts?limit=2&offset=1");
+
+  expect(response.status()).toBe(200);
+  await expect(response.json()).resolves.toEqual({
+    fonts: [
+      {
+        family: "Roboto",
+        category: "sans-serif",
+        variants: ["400", "600", "700"],
+        variable: false,
+      },
+      {
+        family: "Open Sans",
+        category: "sans-serif",
+        variants: ["400", "600", "700"],
+        variable: true,
+      },
+    ],
+    total: 24,
+    offset: 1,
+    limit: 2,
+    hasMore: true,
+  });
+});
+
+test("idempotently deletes an unknown local Codex chat without credentials", async ({
+  request,
+}) => {
+  const response = await request.delete("/api/generate-theme", {
+    data: { chatId: CHAT_ID },
+  });
+
+  expect(response.status()).toBe(204);
+  expect(await response.body()).toHaveLength(0);
+});
+
 test("previews registry tokens and applies the reviewed engine plan", async ({
   page,
 }) => {
-  await rm(FRONTEND_LIB_TARGET, { recursive: true, force: true });
+  await rm(FRONTEND_LIB_TARGET, {
+    recursive: true,
+    force: true,
+    maxRetries: 5,
+    retryDelay: 100,
+  });
   await mkdir(FRONTEND_LIB_TARGET, { recursive: true });
   await writeFile(
     resolve(FRONTEND_LIB_TARGET, "package.json"),
@@ -459,7 +546,12 @@ test("previews registry tokens and applies the reviewed engine plan", async ({
 
     observed.expectClean();
   } finally {
-    await rm(FRONTEND_LIB_TARGET, { recursive: true, force: true });
+    await rm(FRONTEND_LIB_TARGET, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 100,
+    });
   }
 });
 

@@ -9,33 +9,17 @@ import { DialogActionsProvider } from "@/hooks/use-dialog-actions";
 import { useResolvedIsMobile } from "@/hooks/use-mobile";
 import { Loading } from "@/components/loading";
 import { useEditorStore } from "@/store/editor-store";
-import { Theme, ThemeStyles } from "@/types/theme";
+import { ThemeStyles } from "@/types/theme";
 import { Sliders } from "lucide-react";
-import React, { use, useEffect } from "react";
+import React from "react";
 import { ActionBar } from "./action-bar/action-bar";
 import ThemeControlPanel from "./theme-control-panel";
 import ThemePreviewPanel from "./theme-preview-panel";
 
-interface EditorProps {
-  themePromise: Promise<Theme | null>;
-}
-
-const isThemeStyles = (styles: unknown): styles is ThemeStyles => {
-  return (
-    !!styles &&
-    typeof styles === "object" &&
-    styles !== null &&
-    "light" in styles &&
-    "dark" in styles
-  );
-};
-
-const Editor: React.FC<EditorProps> = ({ themePromise }) => {
+const Editor: React.FC = () => {
   const themeState = useEditorStore((state) => state.themeState);
   const setThemeState = useEditorStore((state) => state.setThemeState);
   const isMobile = useResolvedIsMobile();
-
-  const initialTheme = themePromise ? use(themePromise) : null;
 
   const handleStyleChange = React.useCallback(
     (newStyles: ThemeStyles) => {
@@ -44,25 +28,6 @@ const Editor: React.FC<EditorProps> = ({ themePromise }) => {
     },
     [setThemeState]
   );
-
-  useEffect(() => {
-    if (initialTheme && isThemeStyles(initialTheme.styles)) {
-      const prev = useEditorStore.getState().themeState;
-      setThemeState({
-        ...prev,
-        styles: initialTheme.styles,
-        preset: initialTheme.id,
-      });
-    }
-  }, [initialTheme, setThemeState]);
-
-  if (initialTheme && !isThemeStyles(initialTheme.styles)) {
-    return (
-      <div className="text-destructive flex h-full items-center justify-center">
-        Fetched theme data is invalid.
-      </div>
-    );
-  }
 
   const styles = themeState.styles;
 

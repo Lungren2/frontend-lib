@@ -16,11 +16,11 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import { useFullscreen } from "@/hooks/use-fullscreen";
+import { usePreviewTabFromUrl } from "@/hooks/use-preview-tab-from-url";
 import { useThemeInspector } from "@/hooks/use-theme-inspector";
 import { cn } from "@/lib/utils";
 import { ThemeEditorPreviewProps } from "@/types/theme";
 import { Inspect, Maximize, Minimize, MoreVertical } from "lucide-react";
-import { useQueryState } from "nuqs";
 import { lazy } from "react";
 import InspectorOverlay from "./inspector-overlay";
 import ColorPreview from "./theme-preview/color-preview";
@@ -38,17 +38,6 @@ const TypographyDemo = lazy(
 const FrontendLibPreview = lazy(
   () => import("./theme-preview/frontend-lib-preview"),
 );
-const PREVIEW_TABS = new Set([
-  "frontend-lib",
-  "cards",
-  "dashboard",
-  "application",
-  "marketing",
-  "mail",
-  "typography",
-  "colors",
-]);
-
 const ThemePreviewPanel = ({
   styles,
   currentMode,
@@ -56,10 +45,7 @@ const ThemePreviewPanel = ({
   themeName,
 }: ThemeEditorPreviewProps & { themeId?: string; themeName?: string }) => {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
-  const [previewQuery, setPreviewQuery] = useQueryState("p", {
-    defaultValue: "cards",
-  });
-  const activeTab = PREVIEW_TABS.has(previewQuery) ? previewQuery : "cards";
+  const { previewTab: activeTab, setPreviewTab } = usePreviewTabFromUrl();
 
   const {
     rootRef,
@@ -75,7 +61,7 @@ const ThemePreviewPanel = ({
   }
 
   const handleTabChange = (value: string) => {
-    setPreviewQuery(value);
+    setPreviewTab(value);
   };
 
   return (
@@ -88,7 +74,7 @@ const ThemePreviewPanel = ({
       >
         <Tabs
           value={activeTab}
-          onValueChange={setPreviewQuery}
+          onValueChange={setPreviewTab}
           className="flex flex-1 flex-col overflow-hidden"
         >
           <HorizontalScrollArea className="mt-2 mb-1 flex w-full items-center justify-between px-4">

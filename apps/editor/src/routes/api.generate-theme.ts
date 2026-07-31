@@ -18,13 +18,12 @@ import { encodeThemeChatEvent, type ThemeChatStreamEvent } from "@/lib/ai/theme-
 import { AI_PROMPT_CHARACTER_LIMIT } from "@/lib/constants";
 import { themeStylesSchema, type ThemeStyles } from "@/types/theme";
 import { Codex, type Thread, type ThreadOptions } from "@openai/codex-sdk";
+import { createFileRoute } from "@tanstack/react-router";
 import { randomUUID } from "node:crypto";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
-
-export const runtime = "nodejs";
 
 const CODEX_ENV_KEYS = [
   "ALL_PROXY",
@@ -58,7 +57,7 @@ const CHAT_TTL_MS = 60 * 60 * 1_000;
 const MAX_CHAT_SESSIONS = 16;
 const MAX_REQUEST_BYTES = 64_000;
 const LOOPBACK_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
-const codex = new Codex({ env: codexEnvironment() });
+let codex: Codex | undefined;
 const requestSchema = z.object({
   chatId: z.string().uuid().optional(),
   prompt: z.string().trim().min(1).max(AI_PROMPT_CHARACTER_LIMIT),
@@ -80,6 +79,11 @@ function codexEnvironment(): Record<string, string> {
     if (value) environment[key] = value;
   }
   return environment;
+}
+
+function getCodex() {
+  codex ??= new Codex({ env: codexEnvironment() });
+  return codex;
 }
 
 async function readJsonBody(request: Request): Promise<unknown> {
@@ -260,7 +264,7 @@ function createThemeChatStream({
   });
 }
 
-export async function POST(request: Request) {
+async function postGenerateTheme(request: Request) {
   if (!isLoopbackRequest(request)) {
     return Response.json({ error: "Local theme generation is only available on loopback." }, { status: 403 });
   }
@@ -312,7 +316,20 @@ export async function POST(request: Request) {
 
   const chatId = requestedChatId ?? randomUUID();
   const options = threadOptions(scratchDirectory);
-  const thread = existingSession ? codex.resumeThread(existingSession.threadId, options) : codex.startThread(options);
+  let thread: Thread;
+  try {
+    const localCodex = getCodex();
+    thread = existingSession
+      ? localCodex.resumeThread(existingSession.threadId, options)
+      : localCodex.startThread(options);
+  } catch (error) {
+    generationInFlight = false;
+    await rm(scratchDirectory, { recursive: true, force: true }).catch(
+      () => undefined,
+    );
+    console.error("Could not start the local Codex theme chat", error);
+    return Response.json({ error: publicError(error) }, { status: 503 });
+  }
   const stream = createThemeChatStream({
     request,
     thread,
@@ -332,7 +349,7 @@ export async function POST(request: Request) {
   });
 }
 
-export async function DELETE(request: Request) {
+async function deleteThemeChat(request: Request) {
   if (!isLoopbackRequest(request)) {
     return Response.json({ error: "Local theme generation is only available on loopback." }, { status: 403 });
   }
@@ -344,3 +361,12 @@ export async function DELETE(request: Request) {
   chatSessions.delete(parsed.data.chatId);
   return new Response(null, { status: 204 });
 }
+
+export const Route = createFileRoute("/api/generate-theme")({
+  server: {
+    handlers: {
+      POST: ({ request }) => postGenerateTheme(request),
+      DELETE: ({ request }) => deleteThemeChat(request),
+    },
+  },
+});
