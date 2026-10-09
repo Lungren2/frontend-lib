@@ -1,3 +1,15 @@
+# Updated component baseline, 2026-10-09
+
+Interface now adapts [Fluid Functionalism](https://github.com/mickadesign/fluid-functionalism) instead of designing its component catalog from scratch. The original proposal below remains historical design rationale for the namespace, source ownership, engine, and editor. Any statement below about creating bespoke components or excluding Tailwind, CVA, or Tailwind merge is superseded by this decision.
+
+The pinned MIT reference is in `vendor/fluid-functionalism/` (commit `bf9ece46728035afef54feef6ac67e1f413cc0b0`). Adapt the upstream **Base UI** implementations and shared design systems into `registry/src/`, retaining one production component path, `ui.*`, `data-ui`, and the existing engine/CLI. The Radix implementations are not an alternate application mode.
+
+The local tweakcn-derived editor is the design-system editor. Its validated theme adapter maps into the Interface-owned token variables consumed by the adapted components, and its preview renders canonical registry source. The upstream Tailwind v4 utilities, `cva` recipes, and shared styling systems stay in the adapted components. Interface owns the generated `ui.*` namespace and source installation, while tweakcn edits the CSS variables and Tailwind `@theme` tokens that the components consume. The consumer project compiles the installed Tailwind component source; there is no second plain-CSS component mode.
+
+Migration sequence: pin source, configure Tailwind scanning and token generation for installed source, port the actual upstream button `cva` recipe and theme preview, verify engine/consumer installation, then port complete upstream component groups and shared behaviors in reviewable increments. Replace existing production components rather than maintaining a second runtime.
+
+---
+
 Compared with shadcn/ui, the proposed system differs in these ways:
 
 - **Single namespace API:** `import { ui } from "..."` followed by `<ui.button />`, `<ui.select />`, etc., instead of individual component imports.
