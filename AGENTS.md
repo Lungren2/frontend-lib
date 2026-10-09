@@ -10,7 +10,7 @@ Frontend Lib is an agent-friendly, source-owned React interface system and code-
 - Namespace keys are lowercase because the API should resemble HTML. A JSX member expression such as `<ui.button />` is a React component, not an intrinsic element.
 - Base UI is the behavioral substrate for supported interface primitives. Reuse its accessibility, focus, keyboard, state, portal, and composition behavior instead of rebuilding it.
 - Native HTML remains appropriate for document structure. Do not force Base UI machinery under static headings, paragraphs, sections, or layout wrappers when it adds no behavior.
-- Styling is owned by the design system through CSS custom properties, semantic classes, and `data-*` attributes. Fluid Functionalism now supplies the visual and interaction source baseline.
+- Fluid Functionalism supplies the Base UI component and interaction baseline. Preserve its Tailwind CSS v4 utility recipes and its design tokens; `data-ui` and `data-*` attributes carry Interface identity and semantic state.
 - Installed source is editable application code. Never require consumers to modify `node_modules`.
 - The system is designed for both human and coding-agent use: one import, a small vocabulary, predictable locations, and minimal implementation trivia.
 
@@ -22,7 +22,7 @@ The temporary internal package scope is `@frontend-lib/*`, and the future CLI co
 - Reuse the upstream Base UI variants and shared motion, size, typography, surfaces, and hover behavior. Do not design replacement components from scratch when a relevant upstream component exists.
 - `registry/src/` remains the only production component implementation. Adapt upstream code into its Interface owner path with `data-ui`, semantic attributes, and the generated `ui.*` namespace.
 - Only Base UI components are valid. Do not add Radix compatibility, side-by-side implementations, or runtime feature modes.
-- Translate upstream Tailwind component recipes into canonical semantic CSS for consumers. The tweakcn-derived editor can use Tailwind for its own app, but the installed Interface component system does not require Tailwind.
+- Tailwind CSS v4 is the styling system for Interface components and consumer installations. Keep Fluid Functionalism's utility classes and `cva`/`cn` variant recipes instead of translating them into a parallel semantic stylesheet. Consumer setup must configure Tailwind to scan installed source reliably.
 - Wire design tokens through the editor's existing theme adapter and the engine's validated `planTheme`/`applyTheme`. The editor preview must render the actual `registry/src/` component and same computed tokens used by consumers.
 - Preserve source attribution and MIT licensing in adapted files. Check accessibility, keyboard behavior, reduced motion, focus, and consumer build as each component is ported.
 
@@ -46,6 +46,7 @@ packages/engine/    Non-interactive planning and mutation engine
 registry/           Canonical installable component source and component tests
 tests/              Cross-package installation, removal, update, and fixture tests
 vendor/tweakcn/     Unmodified upstream editor reference, outside the workspace
+vendor/fluid-functionalism/ Pinned Base UI component/design source, outside the workspace
 registry.json       Source registry catalog
 ```
 
@@ -85,15 +86,17 @@ Rules:
 
 ## Styling contract
 
-- Plain CSS is the default design-system implementation. Consumer projects may use Tailwind, but Tailwind is not a library runtime requirement.
-- CSS custom properties own shared tokens. Semantic stylesheets own stable component recipes. React selects semantic props and attributes.
-- Do not add CVA, Tailwind Variants, `tailwind-merge`, or large JavaScript class maps without a confirmed requirement.
-- Keep tokens in `registry/src/styles/tokens.css`, component styling under `registry/src/styles/components/`, and broad-to-narrow imports in `registry/src/styles/index.css`.
-- Use cascade layers to make ordering explicit.
+- Tailwind CSS v4 is the single styling implementation for installed components. It runs during the consumer build to generate ordinary CSS; do not describe it as a browser runtime dependency or add a plain-CSS compatibility mode.
+- CSS custom properties and Tailwind v4 `@theme` declarations own design values. React/TSX owns the upstream utility recipes and finite variant selections. `data-ui` and focused state attributes remain part of Interface's public element contract.
+- Preserve upstream `class-variance-authority`, `cn` (`clsx` and `tailwind-merge`), and established finite component variants where used. Avoid a second variant system, dynamic utility-name construction, and new abstractions that duplicate upstream recipes.
+- Use a Tailwind v4 entry stylesheet and `@theme` for shared tokens. Keep reset/base rules and unsupported CSS mechanics in the smallest owning stylesheet. Do not move utility-expressible component styling out of TSX merely because its class string is long.
+- Preserve Tailwind's native `theme`, `base`, `components`, `utilities` cascade order. The editor and consumer-generated stylesheets must honor the same token contract and actual Tailwind build output.
 - Every interactive component must cover keyboard focus, hover-capable devices, active state, disabled state, forced colors, and reduced motion where relevant.
 - Prefer intrinsic sizing and logical properties. Verify long labels and narrow containers; do not assume fixed text lengths.
 - Do not remove browser focus indication without an accessible replacement.
-- Avoid baking icons into primitive APIs. Accept icon content through composition unless the design system later adopts an explicit icon dependency.
+- Preserve Fluid Functionalism's icon role/slot API when adapting components. Keep default icon dependencies explicit and retain the upstream ability to substitute icons through a provider when applicable.
+
+ACF's `tailwind-css-architect` skill is the Tailwind policy reference. Its `responsive-css-architect` companion owns layout constraints and CSS organization, not a mandate to convert utility recipes into plain CSS. Do not introduce ACF-specific Tailwind plugins unless an adopted component or an approved layout actually requires them.
 
 ## Registry and installation model
 
@@ -128,15 +131,14 @@ Namespace and stylesheet entry points should be generated deterministically from
 - The repository is a pnpm workspace orchestrated with Turborepo.
 - React and TypeScript are the only supported component targets for the initial version.
 - `@base-ui/react` is the component behavior dependency.
-- `ui.button` is the first Fluid Functionalism-derived component under adaptation.
-- The button wraps Base UI, uses `primary`, `secondary`, `tertiary`, and `ghost` variants, and has `default`, `compact`, `icon`, and `icon-compact` sizes. It also has loading, active, and composable icon slots.
+- The existing `ui.button` is still the earlier Base UI-backed implementation. The Fluid Functionalism button adaptation remains pending; its Tailwind/CVA recipe must be ported without converting it into a new hand-written CSS implementation.
 - The engine implements validated `ui.config.json` and `ui.lock.json` state, registry dependency resolution, deterministic planning, SHA-256 ownership hashes, generated namespace/styles, managed package dependencies, dry runs, idempotent addition, and safe item-level removal.
 - The engine also owns two-phase theme configuration: `planTheme` hashes sorted writes and file preconditions without mutating, while `applyTheme` rejects stale plans before writing an owned `styles/theme.css` and regenerating the layered stylesheet entry point.
 - The CLI implements thin `init`, `add`, and `remove` commands over the engine. `init` and `add` require a registry path; all three commands accept `--cwd` and `--dry-run`.
 - Cross-package lifecycle tests exercise temporary projects through both the engine API and the built CLI executable. A Vite fixture installs the source and completes a production build.
 - The private editor runs on TanStack Start with Vite and Nitro. Its route tree owns the editor page and loopback-only server APIs; production serving binds to loopback by default.
 - The private local theme editor is a traceable tweakcn derivative with token editing, live previews, import/export, local persistence, and a loopback-only streamed, multi-turn Codex SDK theme chat. Its server retains opaque in-memory chat mappings and applies only validated theme payloads.
-- The editor's Frontend Lib tab renders the canonical registry `ui.button` and public stylesheet in one scoped surface. A shared adapter maps editor state to `--ui-*` preview values and the engine theme contract. Plan/apply uses only `FRONTEND_LIB_TARGET_CWD` from the server environment and never accepts a browser-supplied filesystem path.
+- The editor's Frontend Lib tab currently renders the original registry `ui.button` and public stylesheet in one scoped preview. A shared adapter maps editor state to `--ui-*` preview values and the engine theme contract. Its integration with Fluid Functionalism's Tailwind v4 tokens and component recipes is pending. Plan/apply uses only `FRONTEND_LIB_TARGET_CWD` from the server environment and never accepts a browser-supplied filesystem path.
 - The editor has a curated, license-complete Google Fonts cache with 15 preset-relevant families, 14 variable families, 29 WOFF2 files, generated `@font-face` CSS, source hashes and an offline integrity check. The CSS is deliberately not imported yet; runtime self-hosting remains a separate adaptation.
 - There is no published package, finalized brand, compatibility matrix, documentation site, Storybook, multi-framework adapter, or icon dependency yet.
 

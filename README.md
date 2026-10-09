@@ -1,8 +1,8 @@
 # Frontend Lib
 
-An agent-friendly, source-owned React interface system built on Base UI.
+An agent-friendly, source-owned React interface system adopting Fluid Functionalism's Base UI components and Tailwind CSS v4 design system.
 
-The repository is a pnpm monorepo containing the component registry, installation tooling, and a local theme editor. Run `pnpm dev` to open the editor.
+The repository is a pnpm monorepo containing the component registry, installation tooling, and a local tweakcn-derived theme editor. Run `pnpm dev` to open the editor. The Fluid Functionalism source is pinned in `vendor/fluid-functionalism/`; the Tailwind/CVA production adaptation is in progress on a draft PR.
 
 The editor's `Frontend Lib` tab renders canonical registry source. Set
 `FRONTEND_LIB_TARGET_CWD` to an initialized consumer project to review and apply a deterministic
