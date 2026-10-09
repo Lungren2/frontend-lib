@@ -116,7 +116,7 @@ export default function FrontendLibPreview({
   };
 
   return (
-    <div className="min-h-full p-4 sm:p-6" style={previewStyle}>
+    <div data-ui-theme="" className="min-h-full p-4 sm:p-6" style={previewStyle}>
       <div className="mx-auto grid max-w-4xl gap-6">
         <section aria-labelledby="frontend-lib-buttons" className="grid gap-4">
           <div>
@@ -124,14 +124,17 @@ export default function FrontendLibPreview({
               Button
             </h2>
             <p className="text-muted-foreground text-sm">
-              Canonical registry source using the current editor tokens.
+              Fluid Functionalism-derived Base UI controls using the current editor tokens.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <ui.button>Primary button</ui.button>
             <ui.button variant="secondary">Secondary button</ui.button>
+            <ui.button variant="tertiary">Tertiary button</ui.button>
             <ui.button variant="ghost">Ghost button</ui.button>
-            <ui.button size="small">Small button</ui.button>
+            <ui.button size="compact">Compact button</ui.button>
+            <ui.button active variant="secondary">Active button</ui.button>
+            <ui.button loading>Loading button</ui.button>
             <ui.button disabled>Disabled button</ui.button>
             <ui.button variant="secondary">
               A button with deliberately long content

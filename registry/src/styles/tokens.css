@@ -26,3 +26,52 @@
   --ui-space-4: 1rem;
   --ui-space-6: 1.5rem;
 }
+
+/* Fluid Functionalism design roles, mapped to the Interface-owned theme contract.
+ * Derived from app/globals.css and registry.json at
+ * bf9ece46728035afef54feef6ac67e1f413cc0b0 (MIT).
+ *
+ * Keep these roles computed from the existing --ui tokens. The tweakcn editor
+ * and engine both write the same canonical theme values, so a consumer and the
+ * local preview cannot silently acquire different palettes.
+ */
+:root,
+[data-ui-theme] {
+  --ui-control-size-default: 36px;
+  --ui-control-size-compact: 28px;
+
+  --ui-body-size-default: 13px;
+  --ui-body-leading-default: 20px;
+  --ui-body-size-compact: 12px;
+  --ui-body-leading-compact: 18px;
+  --ui-title-size-default: 16px;
+  --ui-title-leading-default: 22px;
+  --ui-caption-size-default: 12px;
+  --ui-caption-leading-default: 16px;
+
+  --ui-surface-1: var(--ui-color-canvas);
+  --ui-surface-2: color-mix(in oklab, var(--ui-color-canvas) 97%, var(--ui-color-text));
+  --ui-surface-3: color-mix(in oklab, var(--ui-color-canvas) 94%, var(--ui-color-text));
+  --ui-surface-4: color-mix(in oklab, var(--ui-color-canvas) 90%, var(--ui-color-text));
+  --ui-surface-5: color-mix(in oklab, var(--ui-color-canvas) 85%, var(--ui-color-text));
+  --ui-surface-6: color-mix(in oklab, var(--ui-color-canvas) 80%, var(--ui-color-text));
+  --ui-surface-7: color-mix(in oklab, var(--ui-color-canvas) 75%, var(--ui-color-text));
+  --ui-surface-8: color-mix(in oklab, var(--ui-color-canvas) 70%, var(--ui-color-text));
+
+  --ui-hover: color-mix(in oklab, var(--ui-color-text) 5%, transparent);
+  --ui-active: color-mix(in oklab, var(--ui-color-text) 9%, transparent);
+  --ui-selected: color-mix(in oklab, var(--ui-color-text) 15%, transparent);
+  --ui-tint: var(--ui-color-secondary);
+  --ui-tint-hover: var(--ui-color-secondary-hover);
+
+  --ui-shadow-color: color-mix(in oklab, var(--ui-color-text) 7%, transparent);
+  --ui-shadow-1: 0 0 0 1px var(--ui-shadow-color);
+  --ui-shadow-2: var(--ui-shadow-1), 0 1px 1px -0.5px var(--ui-shadow-color);
+  --ui-shadow-3: var(--ui-shadow-2), 0 3px 3px -1.5px var(--ui-shadow-color);
+  --ui-shadow-4: var(--ui-shadow-3), 0 6px 6px -3px var(--ui-shadow-color);
+  --ui-shadow-5: var(--ui-shadow-4), 0 12px 12px -6px var(--ui-shadow-color);
+  --ui-shadow-6: var(--ui-shadow-5), 0 24px 24px -12px var(--ui-shadow-color);
+  --ui-shadow-7: var(--ui-shadow-6), 0 48px 48px -24px var(--ui-shadow-color);
+  --ui-shadow-8: var(--ui-shadow-7), 0 96px 96px -48px var(--ui-shadow-color);
+}
+

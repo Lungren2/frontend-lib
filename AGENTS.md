@@ -10,11 +10,21 @@ Frontend Lib is an agent-friendly, source-owned React interface system and code-
 - Namespace keys are lowercase because the API should resemble HTML. A JSX member expression such as `<ui.button />` is a React component, not an intrinsic element.
 - Base UI is the behavioral substrate for supported interface primitives. Reuse its accessibility, focus, keyboard, state, portal, and composition behavior instead of rebuilding it.
 - Native HTML remains appropriate for document structure. Do not force Base UI machinery under static headings, paragraphs, sections, or layout wrappers when it adds no behavior.
-- Styling is owned by the design system through CSS custom properties, semantic classes, and `data-*` attributes.
+- Styling is owned by the design system through CSS custom properties, semantic classes, and `data-*` attributes. Fluid Functionalism now supplies the visual and interaction source baseline.
 - Installed source is editable application code. Never require consumers to modify `node_modules`.
 - The system is designed for both human and coding-agent use: one import, a small vocabulary, predictable locations, and minimal implementation trivia.
 
 The temporary internal package scope is `@frontend-lib/*`, and the future CLI command is provisionally `frontend-lib`. Rename both when the product name is chosen; do not treat these names as final branding.
+
+## Fluid Functionalism adoption
+
+- Source baseline: `mickadesign/fluid-functionalism` commit `bf9ece46728035afef54feef6ac67e1f413cc0b0`, tree `06dd24ae3b4a66d320a75b4fc820c4a6a357a5de`. Original files and MIT license live under `vendor/fluid-functionalism/`; keep the pinned reference unchanged.
+- Reuse the upstream Base UI variants and shared motion, size, typography, surfaces, and hover behavior. Do not design replacement components from scratch when a relevant upstream component exists.
+- `registry/src/` remains the only production component implementation. Adapt upstream code into its Interface owner path with `data-ui`, semantic attributes, and the generated `ui.*` namespace.
+- Only Base UI components are valid. Do not add Radix compatibility, side-by-side implementations, or runtime feature modes.
+- Translate upstream Tailwind component recipes into canonical semantic CSS for consumers. The tweakcn-derived editor can use Tailwind for its own app, but the installed Interface component system does not require Tailwind.
+- Wire design tokens through the editor's existing theme adapter and the engine's validated `planTheme`/`applyTheme`. The editor preview must render the actual `registry/src/` component and same computed tokens used by consumers.
+- Preserve source attribution and MIT licensing in adapted files. Check accessibility, keyboard behavior, reduced motion, focus, and consumer build as each component is ported.
 
 ## Working principles
 
@@ -118,8 +128,8 @@ Namespace and stylesheet entry points should be generated deterministically from
 - The repository is a pnpm workspace orchestrated with Turborepo.
 - React and TypeScript are the only supported component targets for the initial version.
 - `@base-ui/react` is the component behavior dependency.
-- `ui.button` is the only component currently implemented.
-- The button wraps Base UI Button, preserves its props and behavior, and exposes `primary`, `secondary`, and `ghost` variants plus `small` and `medium` sizes.
+- `ui.button` is the first Fluid Functionalism-derived component under adaptation.
+- The button wraps Base UI, uses `primary`, `secondary`, `tertiary`, and `ghost` variants, and has `default`, `compact`, `icon`, and `icon-compact` sizes. It also has loading, active, and composable icon slots.
 - The engine implements validated `ui.config.json` and `ui.lock.json` state, registry dependency resolution, deterministic planning, SHA-256 ownership hashes, generated namespace/styles, managed package dependencies, dry runs, idempotent addition, and safe item-level removal.
 - The engine also owns two-phase theme configuration: `planTheme` hashes sorted writes and file preconditions without mutating, while `applyTheme` rejects stale plans before writing an owned `styles/theme.css` and regenerating the layered stylesheet entry point.
 - The CLI implements thin `init`, `add`, and `remove` commands over the engine. `init` and `add` require a registry path; all three commands accept `--cwd` and `--dry-run`.
